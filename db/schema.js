@@ -21,3 +21,19 @@
 
 */
 
+var Party = describe('Party', function () {
+    property('title', String);
+    property('description', Text);
+    property('expectedCount', Number);
+    property('location', String);
+    property('begins', Date);
+    property('ends', Date);
+    property('externalLink', String);
+    property('organizer', Number);
+    property('partner', Number);
+    property('image', String);
+    property('hashtag', String);
+    property('createdAt', Date);
+    set('restPath', pathTo.parties);
+});
+

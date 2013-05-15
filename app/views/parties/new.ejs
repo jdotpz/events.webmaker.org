@@ -1,0 +1,18 @@
+<ul class="breadcrumb">
+    <li><a href="/">Home</a> <span class="divider">/</span></li>
+    <li><a href="<%- pathTo.parties() %>">parties</a> <span class="divider">/</span></li>
+    <li class="active"><a href="#">New party</a></li>
+</ul>
+
+<div class="page-header">
+    <h1>New party</h1>
+</div>
+
+<% var form = formFor(party, {action: pathTo.parties(), method: 'POST', id: "party-form", class: 'form-horizontal'}) %>
+<%- form.begin() %>
+<%- include _form %>
+<div class="form-actions">
+    <%- form.submit('<i class="icon-ok icon-white"></i> Create party', {class: 'btn btn-primary'}) %> or
+    <%- linkTo('Cancel', pathTo.parties(), {class: 'btn'}) %>
+</div>
+<%- form.end() %>

@@ -12,6 +12,8 @@
   , "stylus": "latest"
   , "seedjs": "latest"
   , "co-assets-compiler": "*"
+  , "jugglingdb": "0.2.x"
+  , "jugglingdb-mysql": "latest"
   },
   "devDependencies":
   { "nodeunit": "*"
