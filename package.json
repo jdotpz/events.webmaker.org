@@ -3,13 +3,11 @@
 , "engines": ["node >= 0.8.0"]
 , "main": "server.js"
 , "dependencies":
-  { "ejs": "*"
-  , "ejs-ext": "latest"
+  { "nunjucks": "0.1.8a"
   , "express": "~3.x"
   , "compound": ">= 1.1.0"
   , "jugglingdb": ">= 0.1.0"
-  , "coffee-script": ">= 1.1.1"
-  , "stylus": "latest"
+  , "less-middleware": "0.1.9"
   , "seedjs": "latest"
   , "co-assets-compiler": "*"
   , "jugglingdb": "0.2.x"

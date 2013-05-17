@@ -6,7 +6,6 @@ module.exports = function (compound) {
 
   if ('development' === compound.app.get('env')) {
     developmentModules = [
-      'ejs-ext',
       'seedjs',
       'co-generators'
     ]
