@@ -4,9 +4,8 @@ before(loadParty, {
     only: ['show', 'edit', 'update', 'destroy']
     });
 
-action('new', function () {
-    this.title = 'New party';
-    this.party = new Party;
+action('map', function () {
+/*    render({ page: view, makeEndpoint: makeURL, personaSSO: personaSSO }); */
     render();
 });
 

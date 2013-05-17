@@ -1,0 +1,33 @@
+{% block title %}Map{% endblock %}
+{% block body %}
+
+  <!--GeoCoding input field-->
+  <div id="party-panel">
+    <input id="party-title" type="textbox" value="" placeholder="Title">  <br/>
+    <input id="party-date" type="textbox" value="" placeholder="Date">  <br/>
+    <input id="party-description" type="textbox" value="" placeholder="Description">  <br/>
+    <input id="party-organizer" type="textbox" value="" placeholder="Organizer">  <br/>
+    <input id="party-address" type="textbox" value="" placeholder="Address of Party">
+    <input type="button" value="Add Party" onclick="partyPanelAddButton()">
+  </div>
+
+  <div id="map-canvas"></div>
+
+  <button onclick="deleteMarkers()">Clear Markers</button>
+  <button onclick="logMarkers()">Log Markers</button>
+
+  <!--Loads the google maps api and calls initializeMap on the client side once page is loaded-->
+  <script>
+    function loadScript() {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "http://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyB9tTQwsuDUdaDgScl82EHmZxBU9AOeD4k&sensor=false&libraries=places&callback=initializeMap";
+      document.body.appendChild(script);
+    }
+
+    window.onload = loadScript;
+  </script>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}
