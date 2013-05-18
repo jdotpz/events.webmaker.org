@@ -7,7 +7,7 @@
   , "express": "~3.x"
   , "compound": ">= 1.1.0"
   , "jugglingdb": ">= 0.1.0"
-  , "less-middleware": "0.1.9"
+  , "less": "latest"
   , "seedjs": "latest"
   , "co-assets-compiler": "*"
   , "jugglingdb": "0.2.x"
