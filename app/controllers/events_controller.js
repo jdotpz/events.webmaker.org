@@ -1,34 +1,35 @@
 load('application');
 
-before(loadParty, {
+before(loadEvent, {
     only: ['show', 'edit', 'update', 'destroy']
     });
 
 action('map', function () {
 /*    render({ page: view, makeEndpoint: makeURL, personaSSO: personaSSO }); */
+    layout(false);
     render();
 });
 
 action(function create() {
-    Party.create(req.body.Party, function (err, party) {
+    Event.create(req.body.Event, function (err, event) {
         respondTo(function (format) {
             format.json(function () {
                 if (err) {
-                    send({code: 500, error: party && party.errors || err});
+                    send({code: 500, error: event && event.errors || err});
                 } else {
-                    send({code: 200, data: party.toObject()});
+                    send({code: 200, data: event.toObject()});
                 }
             });
             format.html(function () {
                 if (err) {
-                    flash('error', 'Party can not be created');
+                    flash('error', 'Event can not be created');
                     render('new', {
-                        party: party,
-                        title: 'New party'
+                        event: event,
+                        title: 'New event'
                     });
                 } else {
-                    flash('info', 'Party created');
-                    redirect(path_to.parties);
+                    flash('info', 'Event created');
+                    redirect(path_to.events);
                 }
             });
         });
@@ -36,25 +37,25 @@ action(function create() {
 });
 
 action(function index() {
-    this.title = 'Parties index';
-    Party.all(function (err, parties) {
+    this.title = 'Events index';
+    Event.all(function (err, events) {
         switch (params.format) {
             case "json":
-                send({code: 200, data: parties});
+                send({code: 200, data: events});
                 break;
             default:
                 render({
-                    parties: parties
+                    events: events
                 });
         }
     });
 });
 
 action(function show() {
-    this.title = 'Party show';
+    this.title = 'Event show';
     switch(params.format) {
         case "json":
-            send({code: 200, data: this.party});
+            send({code: 200, data: this.event});
             break;
         default:
             render();
@@ -62,10 +63,10 @@ action(function show() {
 });
 
 action(function edit() {
-    this.title = 'Party edit';
+    this.title = 'Event edit';
     switch(params.format) {
         case "json":
-            send(this.party);
+            send(this.event);
             break;
         default:
             render();
@@ -73,23 +74,23 @@ action(function edit() {
 });
 
 action(function update() {
-    var party = this.party;
-    this.title = 'Edit party details';
-    this.party.updateAttributes(body.Party, function (err) {
+    var event = this.event;
+    this.title = 'Edit event details';
+    this.event.updateAttributes(body.Event, function (err) {
         respondTo(function (format) {
             format.json(function () {
                 if (err) {
-                    send({code: 500, error: party && party.errors || err});
+                    send({code: 500, error: event && event.errors || err});
                 } else {
-                    send({code: 200, data: party});
+                    send({code: 200, data: event});
                 }
             });
             format.html(function () {
                 if (!err) {
-                    flash('info', 'Party updated');
-                    redirect(path_to.party(party));
+                    flash('info', 'Event updated');
+                    redirect(path_to.event(event));
                 } else {
-                    flash('error', 'Party can not be updated');
+                    flash('error', 'Event can not be updated');
                     render('edit');
                 }
             });
@@ -98,7 +99,7 @@ action(function update() {
 });
 
 action(function destroy() {
-    this.party.destroy(function (error) {
+    this.event.destroy(function (error) {
         respondTo(function (format) {
             format.json(function () {
                 if (error) {
@@ -109,25 +110,25 @@ action(function destroy() {
             });
             format.html(function () {
                 if (error) {
-                    flash('error', 'Can not destroy party');
+                    flash('error', 'Can not destroy event');
                 } else {
-                    flash('info', 'Party successfully removed');
+                    flash('info', 'Event successfully removed');
                 }
-                send("'" + path_to.parties + "'");
+                send("'" + path_to.events + "'");
             });
         });
     });
 });
 
-function loadParty() {
-    Party.find(params.id, function (err, party) {
-        if (err || !party) {
-            if (!err && !party && params.format === 'json') {
+function loadEvent() {
+    Event.find(params.id, function (err, event) {
+        if (err || !event) {
+            if (!err && !event && params.format === 'json') {
                 return send({code: 404, error: 'Not found'});
             }
-            redirect(path_to.parties);
+            redirect(path_to.events);
         } else {
-            this.party = party;
+            this.event = event;
             next();
         }
     }.bind(this));

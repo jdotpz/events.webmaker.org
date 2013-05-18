@@ -1,14 +1,15 @@
+{% extends "app/views/layout.html" %}
 {% block title %}Map{% endblock %}
 {% block body %}
 
   <!--GeoCoding input field-->
-  <div id="party-panel">
-    <input id="party-title" type="textbox" value="" placeholder="Title">  <br/>
-    <input id="party-date" type="textbox" value="" placeholder="Date">  <br/>
-    <input id="party-description" type="textbox" value="" placeholder="Description">  <br/>
-    <input id="party-organizer" type="textbox" value="" placeholder="Organizer">  <br/>
-    <input id="party-address" type="textbox" value="" placeholder="Address of Party">
-    <input type="button" value="Add Party" onclick="partyPanelAddButton()">
+  <div id="event-panel">
+    <input id="event-title" type="textbox" value="" placeholder="Title">  <br/>
+    <input id="event-date" type="textbox" value="" placeholder="Date">  <br/>
+    <input id="event-description" type="textbox" value="" placeholder="Description">  <br/>
+    <input id="event-organizer" type="textbox" value="" placeholder="Organizer">  <br/>
+    <input id="event-address" type="textbox" value="" placeholder="Address of Event">
+    <input type="button" value="Add Event" onclick="eventPanelAddButton()">
   </div>
 
   <div id="map-canvas"></div>

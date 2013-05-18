@@ -21,7 +21,7 @@
 
 */
 
-define( 'Party',
+define( 'Event',
 function () {
     property('uri'          , String );
     property('title'        , String );

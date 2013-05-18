@@ -117,7 +117,7 @@ function logInfoForLocation(location) {
     if (status == google.maps.GeocoderStatus.OK) {
       var placeData = placeToDataObject(results[0]);
 
-      console.log(JSON.stringify(partyFormData(placeData, true)));
+      console.log(JSON.stringify(eventFormData(placeData, true)));
 
     } else {
       alert('Address not found: ' + status);
@@ -182,15 +182,15 @@ function deleteMarkers() {
 }
 
 // called from GeoCode button
-function partyPanelAddButton() {
-  var address = document.getElementById('party-address').value;
+function eventPanelAddButton() {
+  var address = document.getElementById('event-address').value;
   geocoder.geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
       var placeData = placeToDataObject(results[0]);
 
       adjustBoundsForPlace(results[0]);
 
-      var marker = addMarker(partyFormData(placeData, false));
+      var marker = addMarker(eventFormData(placeData, false));
 
       showInfoForMarker(marker);
 
@@ -205,7 +205,7 @@ function setupAutocomplete() {
     new google.maps.LatLng(-33.8902, 151.1759),
     new google.maps.LatLng(-33.8474, 151.2631));
 
-  var input = document.getElementById('party-address');
+  var input = document.getElementById('event-address');
   var options = {
 //    bounds: defaultBounds,
     types: []  // all
@@ -217,7 +217,7 @@ function setupAutocomplete() {
 
   // setup places changed listener to add marker when changed
   google.maps.event.addListener(autocomplete, 'place_changed', function() {
-    // save these results for when they hit the add party button
+    // save these results for when they hit the add event button
     // var placeData = placeToDataObject(autocomplete.getPlace());
   });
 }
@@ -293,13 +293,13 @@ function infoWindowContent(params) {
   return result.interpolate(params);
 }
 
-function partyFormData(placeData, usePlaceAddress) {
+function eventFormData(placeData, usePlaceAddress) {
   var result = {
-    title: document.getElementById('party-title').value,
-    address: usePlaceAddress ? placeData.address : document.getElementById('party-address').value,
-    date: document.getElementById('party-date').value,
-    description: document.getElementById('party-description').value,
-    organizer: document.getElementById('party-organizer').value,
+    title: document.getElementById('event-title').value,
+    address: usePlaceAddress ? placeData.address : document.getElementById('event-address').value,
+    date: document.getElementById('event-date').value,
+    description: document.getElementById('event-description').value,
+    organizer: document.getElementById('event-organizer').value,
     location: placeData.location
   }
 
