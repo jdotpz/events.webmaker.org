@@ -21,17 +21,35 @@
 
 */
 
-var Party = describe('Party', function () {
-    property( 'title',          String  );
-    property( 'description',    Text    );
-    property( 'location',       String  );
-    property( 'begins',         Date    );
-    property( 'ends',           Date    );
-    property( 'externalLink',   String  );
-    property( 'organizer',      Number  );
-    property( 'partner',        Number  );
-    property( 'image',          String  );
-    property( 'hashtag',        String  );
-    property( 'createdAt',      Date    );
-    set     ( 'restPath',       pathTo.parties);
+define( 'Party',
+function () {
+    property('uri'          , String );
+    property('title'        , String );
+    property('description'  , Text   );
+    property('address'      , Number );
+    property('latitude'     , Number );
+    property('longitude'    , Number );
+    property('begins'       , Date   );
+    property('ends'         , Date   );
+    property('eventLink'    , String );
+    property('organizer'    , Number );
+    property('partner'      , Number );
+    property('image'        , String );
+    property('createdAt'    , Date   );
+});
+define( 'Gallery',
+function () {
+    property('uri'          , String );
+});
+define( 'GalleryImage',
+function () {
+    property('uri'          , String );
+});
+define( 'Make',
+function () {
+    property('uri'          , String );
+});
+define( 'Guide',
+function () {
+    property('uri'          , String );
 });
