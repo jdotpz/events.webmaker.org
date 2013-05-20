@@ -9,12 +9,9 @@ function resFmt(fmts) {
     return res.format(fmts);
 }
 
-action('map', function () {
-    render({ dummy: new Event() });
-});
-action('list', function () {
-    render({ dummy: new Event() });
-});
+// Provide a dummy event for form validation
+before(function () { this.dummy = new Event() });
+
 
 // CREATE
 action(function create() {
