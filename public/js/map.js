@@ -1,28 +1,18 @@
+require(["infobubble", "markerclusterer"]);
 
-var markersArray = [];
 var map;
 var geocoder;
 var infoWindow;
 var defaultZoom = 13;
+var markerManager;
 
 // called from /views/map.html to install the google map
-
-// string helper function to interpolate
-if (!String.prototype.interpolate) {
-  String.prototype.interpolate = function (o) {
-    return this.replace(
-      /\{([^{}]*)\}/g,
-      function (a, b) {
-        var r = o[b];
-        return typeof r === 'string' || typeof r === 'number' ? r : a;
-      }
-    );
-  };
-}
 
 function initializeMap() {
   var mapCenter = new google.maps.LatLng(37.774546, -122.433523);
   geocoder = new google.maps.Geocoder();
+
+  setupFunctionOverrides();
 
   var mapOptions = {
     zoom: defaultZoom,
@@ -53,14 +43,16 @@ function initializeMap() {
   setupAutocomplete();
   setupSharedInfoWindow();
 
+  var mcOptions = {gridSize: 20};
+  markerManager = new MarkerClusterer(map, [], mcOptions);
+
   setTimeout( function() {
     dropPins();
   }, 500)
 }
 
 function dropPins() {
-  var jsonData = '[{"title":"Coding with Ruby","address":"4255 24th Street, San Francisco, CA","date":"Thurs July 23, 2014","description":"Learn to code Ruby with the guys from Amoeba.","organizer":"Amoe.ba","location":{"hb":37.750842,"ib":-122.43751500000002}},{"title":"Code by the Park","address":"94114 Abbey Street, San Francisco, CA","date":"Friday, January 2nd, 2pm","description":"Sit around Dolores Park and write code","organizer":"Sara Williams","location":{"hb":37.7635132,"ib":-122.42722679999997}},{"title":"Coding with Python","address":"660 York Street, San Francisco, CA","date":"Wed March 23, 2014","description":"Learn to code Python with the guys from Amoeba.","organizer":"Amoe.ba","location":{"hb":37.7608724,"ib":-122.40920990000001}},{"title":"Writing tests can be fun","address":"94117 Grove Street, San Francisco, CA","date":"Thursday June 23rd at 3pm","description":"Tests can be fun if you know what your doing. Learn how here.","organizer":"Joey Bishop","location":{"hb":37.7755105,"ib":-122.44130139999999}}]';
-  var theModels = JSON.parse(jsonData);
+  var theModels = seedModels();
 
   for (var i in theModels) {
     (function(model) {
@@ -73,17 +65,32 @@ function dropPins() {
   }
 }
 
+function seedModels() {
+  jsonData = '[{"title":"Writing tests can be fun","address":"94117 Grove Street, San Francisco, CA","date":"Thursday June 23rd at 3pm","description":"Tests can be fun if you know what your doing. Learn how here.","organizer":"Joey Bishop","location":{"lat":37.7755105,"lng":-122.44130139999999}},{"title":"Coding with Ruby","address":"4255 24th Street, San Francisco, CA","date":"Thurs July 23, 2014","description":"Learn to code Ruby with the guys from Amoeba.","organizer":"Amoe.ba","location":{"lat":37.750842,"lng":-122.43751500000002}},{"title":"Code by the Park","address":"94114 Abbey Street, San Francisco, CA","date":"Friday, January 2nd, 2pm","description":"Sit around Dolores Park and write code","organizer":"Sara Williams","location":{"lat":37.7635132,"lng":-122.42722679999997}},{"title":"Cobol for the Web","address":"94102 Franklin Street, San Francisco, CA","date":"Friday June 23rd, 3pm - 8pm","description":"Don\'t want to learn those new fancy smancy languages like Javascript?  Use Cobol!","organizer":"Dr. Dirk Dirkland","location":{"lat":37.7784056,"lng":-122.42160580000001}},{"title":"Coding with Python","address":"660 York Street, San Francisco, CA","date":"Wed March 23, 2014","description":"Learn to code Python with the guys from Amoeba.","organizer":"Amoe.ba","location":{"lat":37.7608724,"lng":-122.40920990000001}}]';
+
+  var result = JSON.parse(jsonData);
+
+  return result;
+}
+
 function addMarker(model) {
+  var icon = {
+    url: "../img/map/pin-event.png",      // 43 x 51
+    size: new google.maps.Size(43, 51),
+//    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(23, 0)
+//    scaledSize: new google.maps.Size(43, 51)
+  };
 
   var marker = new google.maps.Marker({
-    position: new google.maps.LatLng(model.location.hb, model.location.ib),
-    map: map,
+    position: new google.maps.LatLng(model.location.lat, model.location.lng),
+    icon: icon,
     draggable: false,
     animation: google.maps.Animation.DROP,
     title: model.title
   });
 
-  markersArray.push(marker);
+  markerManager.addMarker(marker);
 
   // store the content for the info window in the marker
   marker.set('infoContent', infoWindowContent(model));
@@ -97,15 +104,12 @@ function addMarker(model) {
 }
 
 function showInfoForMarker(marker) {
-  infoWindow.setContent(marker.get('infoContent'));
-  infoWindow.open(map, marker);
+  showInfobubble(marker);
 }
 
 function setupSharedInfoWindow() {
-  infoWindow = new google.maps.InfoWindow;
-
   google.maps.event.addListener(map, 'click', function(event) {
-    infoWindow.close();
+    closeInfoWindow();
 
     // should only be enabled for debugging
     logInfoForLocation(event.latLng);
@@ -118,9 +122,6 @@ function logInfoForLocation(location) {
       var placeData = placeToDataObject(results[0]);
 
       console.log(JSON.stringify(eventFormData(placeData, true)));
-
-    } else {
-      alert('Address not found: ' + status);
     }
   });
 }
@@ -157,28 +158,9 @@ function setColorOptions() {
 //  map.setMapTypeId('webmaker_style');
 }
 
-// Removes the overlays from the map, but keeps them in the array
-function removeMarkers() {
-  if (markersArray) {
-    for (var i in markersArray) {
-      markersArray[i].setMap(null);
-    }
-  }
-}
-
-// Shows any overlays currently in the array
-function showMarkers() {
-  if (markersArray) {
-    for (var i in markersArray) {
-      markersArray[i].setMap(map);
-    }
-  }
-}
-
 // Deletes all markers in the array by removing references to them
 function deleteMarkers() {
-  removeMarkers();
-  markersArray.length = 0;
+  markerManager.clearMarkers();
 }
 
 // called from GeoCode button
@@ -234,7 +216,7 @@ function placeToDataObject(place) {
   }
 
   var result = {
-    location: place.geometry.location,
+    location: convertLatLngToObject(place.geometry.location),
     name: theName,
     address: addressFromPlace(place),
     icon: theIcon
@@ -282,12 +264,20 @@ function addressFromPlace(place) {
 }
 
 function infoWindowContent(params) {
-  var result = '<div id="info-content">'+
-    '<div id="info-title">{title}</div>' +
-    '<div id="info-date">{date}</div>' +
-    '<div id="info-address">{address}</div>' +
-    '<div id="info-description">{description}</div>' +
-    '<div id="info-organizer">{organizer}</div>' +
+  var result = '<div>'+
+    '<div class="info-title">{title}</div>' +
+
+    '<div class="info-container">' +
+      '<a href="#"><img src="../img/map/calendar.png" class="icon-img" /></a>' +
+      '<div class="info-date">{date}</div>' +
+      '<br/>' +
+      '<a href="#"><img src="../img/map/pin-event.png" class="icon-img" /></a>' +
+      '<div class="info-address">{address}</div>' +
+    '</div>' +
+
+    '<div class="info-description">{description}</div>' +
+    '<a href="#"><img src="http://lorempixel.com/75/75/" class="organizer-img" /></a>' +
+    '<div class="info-organizer"><span class="title">Organized by</span><br/>{organizer}</div>' +
     '</div>';
 
   return result.interpolate(params);
@@ -307,13 +297,117 @@ function eventFormData(placeData, usePlaceAddress) {
 }
 
 function logMarkers() {
-  var markers = [];
+  var models = [];
 
-  for (var i in markersArray) {
-    marker = markersArray[i];
-    markers.push(marker.get('model'));
+  markers = markerManager.getMarkers();
+
+  for (var i in markers) {
+    marker = markers[i];
+    models.push(marker.get('model'));
   }
 
-  console.log(JSON.stringify(markers));
+  result = JSON.stringify(models);
+
+  // must escape single quotes
+  result = result.replace("'", "\\'");
+
+  console.log("'" + result + "'");
 }
 
+function convertLatLngToObject(latLng) {
+  result = {
+    lat: latLng.lat(),
+    lng: latLng.lng()
+  }
+
+  return result;
+}
+
+function setupFunctionOverrides() {
+  // string helper function to interpolate
+  if (!String.prototype.interpolate) {
+    String.prototype.interpolate = function (o) {
+      return this.replace(
+        /\{([^{}]*)\}/g,
+        function (a, b) {
+          var r = o[b];
+          return typeof r === 'string' || typeof r === 'number' ? r : a;
+        }
+      );
+    };
+  }
+}
+
+function closeInfoWindow() {
+  if (infoWindow) {
+    infoWindow.setMap(null);
+    infoWindow = undefined;
+  }
+}
+
+function showInfobubble(marker) {
+  latLng = marker.position;
+
+  // close info window if clicking on already shown info window
+  if (infoWindow) {
+    if (latLng.equals(infoWindow.get('position'))) {
+      closeInfoWindow();
+      return;
+    }
+  }
+
+  content = marker.get('infoContent');
+
+  closeInfoWindow();
+
+  infoWindow = new InfoBubble({
+    position: latLng,
+    minWidth: 310,
+    minHeight: 310,
+    maxWidth: 310,
+    maxHeight: 310,
+    shadowStyle: 0,
+    padding: 0,
+    /**
+     * Padding around the tabs, now set seperately
+     * from the InfoBubble padding
+     **/
+    tabPadding: 12,
+    /**
+     * You can set the background color to transparent,
+     * and define a class instead
+     **/
+//    backgroundColor: 'transparent',
+    borderRadius: 8,
+    arrowSize: 20,
+    borderWidth: 1,
+    /**
+     * Now that there is no borderWidth check,
+     * you can define a borderColor and it will
+     * apply to Just the arrow
+     **/
+    borderColor: '#888888',
+    disableAutoPan: false,
+    hideCloseButton: true,
+    arrowPosition: '50%',
+    backgroundColor: 'rgba(247, 158, 0, 1)',
+    /**
+     * use the .phoney class to define all styling
+     * for your InfoBubble
+     **/
+    backgroundClassName: 'info-content',
+    /**
+     * define a CSS class name for all, this is
+     * technically the "inactive" tab class
+     **/
+    tabClassName: 'tabClass',
+    /**
+     * define a CSS class name for active tabs only
+     **/
+    activeTabClassName: 'activeTabClass',
+    arrowStyle: 0
+  });
+
+  infoWindow.setContent(content);
+  infoWindow.open(map, marker);
+}
