@@ -31,13 +31,17 @@ Model('Event', {
 });
 Model('Gallery', {
     uri:            String,
+    eventId:        Number,
 });
 Model('GalleryImage', {
     uri:            String,
+    galleryId:      Number,
 });
 Model('Make', {
     uri:            String,
+    eventId:        Number,
 });
 Model('Guide', {
     uri:            String,
+    eventId:        Number,
 });
