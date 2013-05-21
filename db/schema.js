@@ -26,14 +26,14 @@ function () {
     property('uri'          , String );
     property('title'        , String );
     property('description'  , Text   );
-    property('address'      , Number );
+    property('address'      , String );
     property('latitude'     , Number );
     property('longitude'    , Number );
     property('begins'       , Date   );
     property('ends'         , Date   );
     property('eventLink'    , String );
-    property('organizer'    , Number );
-    property('partner'      , Number );
+    property('organizer'    , String );
+    property('partner'      , String );
     property('image'        , String );
     property('createdAt'    , Date   );
 });
