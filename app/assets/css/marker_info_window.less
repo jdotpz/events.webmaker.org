@@ -8,7 +8,7 @@
   .box-shadow(0px, 1px, 20px, rgba(0,0,0,.6));
 }
 
-.info-content {
+.info-container {
   position: absolute;
   left: 0px;
   right: 0px;
@@ -16,6 +16,11 @@
   bottom: 10px;  // space for orange bar at bottom
 
   background-color: rgba(245,245,245,1);
+}
+
+// DON'T NEST THIS INSIDE .info-container
+// this div is put in a temporary div for measuring the size, css breaks if nested
+.info-content {
   padding: 12px;
 }
 
@@ -29,7 +34,7 @@
   margin-bottom: 12px;
 }
 
-.info-container {
+.info-when-where {
   // this hack added to get the floating divs to resize the container to the correct height
   overflow: hidden;
   width: 100%;

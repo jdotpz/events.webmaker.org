@@ -267,10 +267,10 @@ function addressFromPlace(place) {
 }
 
 function infoWindowContent(params) {
-  var result = '<div>'+
+  var result = '<div class="info-content">'+
     '<div class="info-title">{title}</div>' +
 
-    '<div class="info-container">' +
+    '<div class="info-when-where">' +
       '<a href="#"><img src="../img/map/calendar.png" class="icon-img" /></a>' +
       '<div class="info-date">{date}</div>' +
       '<br/>' +
@@ -405,7 +405,7 @@ function showInfobubble(marker) {
      * use the .phoney class to define all styling
      * for your InfoBubble
      **/
-    backgroundClassName: 'info-content',
+    backgroundClassName: 'info-container',
     /**
      * define a CSS class name for all, this is
      * technically the "inactive" tab class

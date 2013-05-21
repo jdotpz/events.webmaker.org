@@ -1461,7 +1461,7 @@ InfoBubble.prototype.figureOutSize_ = function() {
     if (content) {
       var contentSize = this.getElementSize_(content, maxWidth, maxHeight);
 
-      contentSize.height += 40;  // SNG hack to get this shitty code working
+      contentSize.height += 30;  // SNG added - needed some room and didn't want to rewrite code
 
       if (width < contentSize.width) {
         width = contentSize.width;
