@@ -43,7 +43,11 @@ function initializeMap() {
   setupAutocomplete();
   setupSharedInfoWindow();
 
-  var mcOptions = {gridSize: 20};
+  var mcOptions = {
+    gridSize: 20,
+    imagePath: "../img/map/c",
+    imageSizes: [43, 43, 43, 43, 43]
+  };
   markerManager = new MarkerClusterer(map, [], mcOptions);
 
   setTimeout( function() {
@@ -76,10 +80,7 @@ function seedModels() {
 function addMarker(model) {
   var icon = {
     url: "../img/map/pin-event.png",      // 43 x 51
-    size: new google.maps.Size(43, 51),
-//    origin: new google.maps.Point(0, 0),
     anchor: new google.maps.Point(23, 0)
-//    scaledSize: new google.maps.Size(43, 51)
   };
 
   var marker = new google.maps.Marker({
@@ -87,6 +88,7 @@ function addMarker(model) {
     icon: icon,
     draggable: false,
     animation: google.maps.Animation.DROP,
+    anchorPoint: new google.maps.Point(0, 20),  // point were info window is shown, horizontal is not used in infoBubble.js -  see markers anchor for this horizontal adjustment
     title: model.title
   });
 
