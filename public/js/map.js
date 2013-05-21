@@ -413,3 +413,38 @@ function showInfobubble(marker) {
   infoWindow.setContent(content);
   infoWindow.open(map, marker);
 }
+
+
+/*
+
+what are the blue dots vs. the normal blue marker?
+
+how search by location?  zip code? area code? current location?  current map?
+
+standard UI for entering date and time?
+
+searching by date?  How do we pick a range to search?
+
+it would be ideal to get new icons for heat map that had their content area in the center to make it easier to position text
+
+simplify map and remove all but zoom controls like mock up
+
+there are two mockups.  which one do we do?
+
+there are some assets needed:
+  arrow icon on infowindow  (should I use text? ie. > )
+  plus button for adding an event
+  calendar, marker for info window
+  where and when icons for search ui
+
+
+
+
+
+
+
+
+
+
+
+*/
