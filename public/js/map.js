@@ -365,9 +365,9 @@ function showInfobubble(marker) {
   infoWindow = new InfoBubble({
     position: latLng,
     minWidth: 310,
-    minHeight: 310,
     maxWidth: 310,
-    maxHeight: 310,
+    minHeight: 210,
+    maxHeight: 610,
     shadowStyle: 0,
     padding: 0,
     /**
