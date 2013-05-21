@@ -416,6 +416,9 @@ function showInfobubble(marker) {
 
 
 /*
+1) don't cluster if already zoomed in.
+2) use fontawesome for buttons
+3) size calc not working on info window?
 
 what are the blue dots vs. the normal blue marker?
 
@@ -429,22 +432,8 @@ it would be ideal to get new icons for heat map that had their content area in t
 
 simplify map and remove all but zoom controls like mock up
 
-there are two mockups.  which one do we do?
-
 there are some assets needed:
-  arrow icon on infowindow  (should I use text? ie. > )
-  plus button for adding an event
   calendar, marker for info window
   where and when icons for search ui
-
-
-
-
-
-
-
-
-
-
 
 */
