@@ -280,6 +280,13 @@ function infoWindowContent(params) {
     '<div class="info-description">{description}</div>' +
     '<a href="#"><img src="http://lorempixel.com/75/75/" class="organizer-img" /></a>' +
     '<div class="info-organizer"><span class="title">Organized by</span><br/>{organizer}</div>' +
+
+    // show description button
+    '<span class="icon-stack">' +
+      '<i class="icon-sign-blank icon-stack-base"></i>' +
+      '<i class="icon-chevron-right icon-light"></i>' +
+    '</span>' +
+
     '</div>';
 
   return result.interpolate(params);
