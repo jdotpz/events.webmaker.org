@@ -44,7 +44,7 @@ function initializeMap() {
   setupSharedInfoWindow();
 
   var mcOptions = {
-    gridSize: 20
+    gridSize: 20,
     imagePath: "../img/map/c",
     imageSizes: [43, 43, 43, 43, 43]
   };
