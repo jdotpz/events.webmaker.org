@@ -4,52 +4,40 @@
  described in config/database.json. But it's possible to use another database
  connections and multiple different schemas, docs available at
 
- http://railwayjs.com/orm.html
-
- Example of model definition:
-
- define('User', function () {
-     property('email', String, { index: true });
-     property('password', String);
-     property('activated', Boolean, {default: false});
- });
-
- Example of schema configured without config/database.json (heroku redistogo addon):
- schema('redis', {url: process.env.REDISTOGO_URL}, function () {
-     // model definitions here
- });
+ http://jugglingdb.co/
 
 */
 
-define( 'Event',
-function () {
-    property('uri'          , String );
-    property('title'        , String );
-    property('description'  , Text   );
-    property('address'      , String );
-    property('latitude'     , Number );
-    property('longitude'    , Number );
-    property('begins'       , Date   );
-    property('ends'         , Date   );
-    property('eventLink'    , String );
-    property('organizer'    , String );
-    property('partner'      , String );
-    property('image'        , String );
-    property('createdAt'    , Date   );
+function Model(name, fields) {
+    return define(name, function () {
+        for (var f in fields)
+            property(f, fields[f]);
+    });
+}
+
+Model('Event', {
+    title:          String,
+    description:    String,
+    address:        String,
+    latitude:       Number,
+    longitude:      Number,
+    begins:         Date,
+    ends:           Date,
+    resource:       String, // TODO: validate as URI
+    organizer:      String,
+    partner:        String,
+    image:          String,
+    created:        Date,
 });
-define( 'Gallery',
-function () {
-    property('uri'          , String );
+Model('Gallery', {
+    uri:            String,
 });
-define( 'GalleryImage',
-function () {
-    property('uri'          , String );
+Model('GalleryImage', {
+    uri:            String,
 });
-define( 'Make',
-function () {
-    property('uri'          , String );
+Model('Make', {
+    uri:            String,
 });
-define( 'Guide',
-function () {
-    property('uri'          , String );
+Model('Guide', {
+    uri:            String,
 });
