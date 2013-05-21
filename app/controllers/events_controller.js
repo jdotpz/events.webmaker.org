@@ -9,9 +9,6 @@ function resFmt(fmts) {
     return res.format(fmts);
 }
 
-// Provide a dummy event for form validation
-before(function () { this.dummy = new Event() });
-
 
 // CREATE
 action(function create() {
