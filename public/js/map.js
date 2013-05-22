@@ -283,8 +283,8 @@ function infoWindowContent(params) {
     '<div class="info-organizer"><span class="title">Organized by</span><br/>{organizer}</div>' +
 
     // show description button
-    '<span class="icon-stack">' +
-      '<i class="icon-sign-blank icon-stack-base"></i>' +
+    '<span class="icon-stack icon-button-size info-button">' +
+      '<i class="icon-sign-blank icon-stack-base icon-button-color"></i>' +
       '<i class="icon-chevron-right icon-light"></i>' +
     '</span>' +
 
