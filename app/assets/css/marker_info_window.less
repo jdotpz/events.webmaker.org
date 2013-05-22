@@ -4,6 +4,9 @@
 @grayTextColor: gray;
 @blackTextColor: black;
 
+@grayButtonColor: rgba(200,200,200,1);
+@redButtonColor: rgba(237,31,35,1);
+
 .info-bubble-container {
   .box-shadow(0px, 1px, 20px, rgba(0,0,0,.6));
 }
@@ -87,6 +90,7 @@
   .title {
     color: @grayTextColor;
   }
+
   float: left;
   font-size: 16px;
 }
@@ -94,12 +98,17 @@
 // stacked info button using fontawesome
 .info-button {
   float: right;
+
 }
 
 // generic font awesome button classes
 .icon-button-color {
-  color: rgba(200,200,200,1);
+  color: @grayButtonColor;
 }
+
+  a:hover .icon-button-color {
+    color: @redButtonColor;
+  }
 
 .icon-button-size {
   font-size: 1.5em;
