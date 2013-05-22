@@ -1,7 +1,7 @@
 {% macro event_create_form() %}
 <div id="event-create">
 <h2>+ Add an event</h2>
-<form>
+<form action="/events.json" method="POST">
     <fieldset>
         <label for="event[title]"> Name your event
         </label><textarea name="event[title]" rows=3 cols=45
