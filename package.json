@@ -9,7 +9,7 @@
   , "jugglingdb": ">= 0.1.0"
   , "less": "latest"
   , "seedjs": "latest"
-  , "co-assets-compiler": "*"
+  , "connect-assets": "*"
   , "jugglingdb": "0.2.x"
   , "jugglingdb-mysql": "latest"
   },
