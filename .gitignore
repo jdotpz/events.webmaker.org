@@ -17,4 +17,4 @@ coverage.html
 .settings
 doc
 public/css/
-
+*.swp
