@@ -50,10 +50,7 @@
       </nav>
     </div>
   </header>
-  <!--not sure how best to do this - need feedback, I dont want this id of content since I want width; 100%-->
-  <main {% if mapPage %} id="map-content" class="map-clearfix"
-        {% else %}       id="content"     class="content clearfix"
-        {% endif %} >{% block body %}{% endblock %}</main>
+  <main id="content" class="content clearfix">{% block body %}{% endblock %}</main>
   <footer class="footer">
     <section class="make-footer">
       <div class="make-wrapper">
