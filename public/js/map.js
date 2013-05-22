@@ -45,6 +45,7 @@ function initializeMap() {
 
   var mcOptions = {
     gridSize: 20,
+    maxZoom: 15,   // don't cluster after this zoom level.  Clicking on a cluster goes to zoom 16, we don't want clusters at this level
     imagePath: "../img/map/c",
     imageSizes: [43, 43, 43, 43, 43]
   };
@@ -266,10 +267,10 @@ function addressFromPlace(place) {
 }
 
 function infoWindowContent(params) {
-  var result = '<div>'+
+  var result = '<div class="info-content">'+
     '<div class="info-title">{title}</div>' +
 
-    '<div class="info-container">' +
+    '<div class="info-when-where">' +
       '<a href="#"><img src="../img/map/calendar.png" class="icon-img" /></a>' +
       '<div class="info-date">{date}</div>' +
       '<br/>' +
@@ -280,6 +281,13 @@ function infoWindowContent(params) {
     '<div class="info-description">{description}</div>' +
     '<a href="#"><img src="http://lorempixel.com/75/75/" class="organizer-img" /></a>' +
     '<div class="info-organizer"><span class="title">Organized by</span><br/>{organizer}</div>' +
+
+    // show description button
+    '<span class="icon-stack">' +
+      '<i class="icon-sign-blank icon-stack-base"></i>' +
+      '<i class="icon-chevron-right icon-light"></i>' +
+    '</span>' +
+
     '</div>';
 
   return result.interpolate(params);
@@ -397,7 +405,7 @@ function showInfobubble(marker) {
      * use the .phoney class to define all styling
      * for your InfoBubble
      **/
-    backgroundClassName: 'info-content',
+    backgroundClassName: 'info-container',
     /**
      * define a CSS class name for all, this is
      * technically the "inactive" tab class
@@ -416,6 +424,9 @@ function showInfobubble(marker) {
 
 
 /*
+1) don't cluster if already zoomed in.
+2) use fontawesome for buttons
+3) size calc not working on info window?
 
 what are the blue dots vs. the normal blue marker?
 
@@ -429,22 +440,8 @@ it would be ideal to get new icons for heat map that had their content area in t
 
 simplify map and remove all but zoom controls like mock up
 
-there are two mockups.  which one do we do?
-
 there are some assets needed:
-  arrow icon on infowindow  (should I use text? ie. > )
-  plus button for adding an event
   calendar, marker for info window
   where and when icons for search ui
-
-
-
-
-
-
-
-
-
-
 
 */
