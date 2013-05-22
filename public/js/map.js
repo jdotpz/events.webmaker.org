@@ -306,12 +306,12 @@ function infoWindowContent(params) {
 
 function eventFormData(placeData, usePlaceAddress) {
   var result = {
-    title: document.getElementById('event-title').value,
-    address: usePlaceAddress ? placeData.address : document.getElementById('event-address').value,
-    date: document.getElementById('event-date').value,
-    description: document.getElementById('event-description').value,
-    organizer: document.getElementById('event-organizer').value,
-    location: placeData.location
+//    title: document.getElementById('event-title').value,
+//    address: usePlaceAddress ? placeData.address : document.getElementById('event-address').value,
+//    date: document.getElementById('event-date').value,
+//    description: document.getElementById('event-description').value,
+//    organizer: document.getElementById('event-organizer').value,
+//    location: placeData.location
   }
 
   return result;
