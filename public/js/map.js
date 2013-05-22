@@ -1,5 +1,8 @@
 require(["infobubble", "markerclusterer"]);
 
+define(['jquery'],
+  function ($) {
+
 var map;
 var geocoder;
 var infoWindow;
@@ -8,7 +11,7 @@ var markerManager;
 
 // called from /views/map.html to install the google map
 
-function initializeMap() {
+window.initializeMap = function () {
   var mapCenter = new google.maps.LatLng(37.774546, -122.433523);
   geocoder = new google.maps.Geocoder();
 
@@ -95,8 +98,14 @@ function addMarker(model) {
 
   markerManager.addMarker(marker);
 
+  // model needs organizerURL and detailsURL, add them here
+  var copiedModel = $.extend({}, model);
+
+  copiedModel["organizerURL"] = "http://www.mozilla.org";  // SNG need real data here
+  copiedModel["detailsURL"] = "http://www.google.com";
+
   // store the content for the info window in the marker
-  marker.set('infoContent', infoWindowContent(model));
+  marker.set('infoContent', infoWindowContent(copiedModel));
   marker.set('model', model);
 
   google.maps.event.addListener(marker, 'click', function() {
@@ -279,14 +288,16 @@ function infoWindowContent(params) {
     '</div>' +
 
     '<div class="info-description">{description}</div>' +
-    '<a href="#"><img src="http://lorempixel.com/75/75/" class="organizer-img" /></a>' +
+    '<a href="{organizerURL}"><img src="http://lorempixel.com/75/75/" class="organizer-img" /></a>' +
     '<div class="info-organizer"><span class="title">Organized by</span><br/>{organizer}</div>' +
 
     // show description button
-    '<span class="icon-stack">' +
-      '<i class="icon-sign-blank icon-stack-base"></i>' +
+    '<a href="{detailsURL}">' +
+    '<span class="icon-stack icon-button-size info-button">' +
+      '<i class="icon-sign-blank icon-stack-base icon-button-color"></i>' +
       '<i class="icon-chevron-right icon-light"></i>' +
     '</span>' +
+    '</a>' +
 
     '</div>';
 
@@ -445,3 +456,5 @@ there are some assets needed:
   where and when icons for search ui
 
 */
+
+  });
