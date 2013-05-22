@@ -1,6 +1,11 @@
 load('application');
 layout(false);
 
+before('set page name for template', function () {
+    this.page = 'events';
+    next();
+});
+
 function resFmt(fmts) {
     // Optional Content-Type override via 'format' query-parameter.
     var fmt = req.param('format');
@@ -8,11 +13,12 @@ function resFmt(fmts) {
         return fmts[fmt]();
     return res.format(fmts);
 }
-
-
+action('new', function () {
+    render('create', { event: new Event() });
+});
 // CREATE
 action(function create() {
-    Event.create(req.body, function (err, event) {
+    Event.create(req.body.event, function (err, event) {
         resFmt({
             json: function () {
                 if (err) {
@@ -24,8 +30,7 @@ action(function create() {
             html: function () {
                 if (err) {
                     flash('error', 'Event could not be created');
-                    render('new', { event: event,
-                                    title: 'New event' });
+                    render('create', { event: event });
                 } else {
                     flash('info', 'Event created');
                     redirect(path_to.events);
