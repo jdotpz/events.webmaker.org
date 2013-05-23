@@ -2,16 +2,13 @@
 {% include "app/views/events/_create_form.html" %}
 {% block title %}Map{% endblock %}
 
-
 {% block body %}
 
-{{ event_create_form() }}
+  {{ event_create_form() }}
 
   <div id="map-canvas"></div>
 
-  <button id="delete-button" onclick="deleteMarkers()">Clear Markers</button>
-  <button id="log-button" onclick="logMarkers()">Log Markers</button>
-
 {% endblock %}
+
 {% block scripts %}
 {% endblock %}

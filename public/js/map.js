@@ -308,6 +308,29 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     }
   }
 
+  function addDeleteAndLogButtons() {
+    var theDiv = $("<button/>");
+    theDiv.css({
+      position: 'absolute',
+      bottom: '12px',
+      right: 0,
+    });
+    theDiv.text('Clear Markers');
+    theDiv.appendTo($('#map-canvas').parent());
+    theDiv.click(deleteMarkers);
+
+    theDiv = $("<button/>");
+    theDiv.css({
+      position: 'absolute',
+      bottom: '12px',
+      left: 0,
+    });
+    theDiv.text('Log Markers');
+    theDiv.appendTo($('#map-canvas').parent());
+    theDiv.click(logMarkers);
+
+  }
+
   function closeInfoWindow() {
     if (infoWindow) {
       infoWindow.setMap(null);
@@ -444,6 +467,8 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
 
       // this handles the multiple markers at the same location problem.
       oms = new OverlappingMarkerSpiderfier(map);
+
+      addDeleteAndLogButtons();
 
       var mcOptions = {
         gridSize: 20,
