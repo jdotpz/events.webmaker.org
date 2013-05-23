@@ -1,59 +1,31 @@
-#map-canvas {
-  height: 800px;
-  width: 100%;
-}
+body#events.map {
 
-#event-panel {
-  position: absolute;
-  top: 2px;
-  left: 50%;
-  margin-left: -180px;
-  z-index: 5;
-  background-color: rgba(255,255,255,.5);
-  padding: 5px;
-  border: 1px solid #999;
-
-  #event-title, #event-date, #event-description, #event-organizer, #event-address {
-    font-size: 13px;
-    margin: 2px;
-    width: 300px;
+  #content {
+    max-width:  none;
+    width:      100%;
+    padding:    0px;
   }
 
-  #event-button {
-    font-size: 16px;
+  #map-canvas {
+    height: 800px;
+    width: 100%;
   }
-}
 
-#map-content {
-  position: relative;
-  width: 100%;
-  height: 800px;
-}
+  #map-content {
+    position: relative;
+    width: 100%;
+    height: 800px;
+  }
 
-#delete-button {
-  position: absolute;
-  bottom: 3px;
-  right: 12px;
-}
+  #delete-button {
+    position: absolute;
+    bottom: 3px;
+    right: 12px;
+  }
 
-#log-button {
-  position: absolute;
-  bottom: 3px;
-  right: 142px;
-}
-
-
-.map-clearfix {
-// removed inline-block - it was causing white space at bottom of map-content.  Not sure why
-// So this was duplicated from style.less and renamed
-//  display: inline-block;
-
-  &:after {
-    content: '.';
-    display: block;
-    clear: both;
-    visibility: hidden;
-    line-height: 0;
-    height: 0;
+  #log-button {
+    position: absolute;
+    bottom: 3px;
+    right: 142px;
   }
 }

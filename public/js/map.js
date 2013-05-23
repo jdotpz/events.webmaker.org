@@ -125,7 +125,7 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
 
   // called from GeoCode button
   function eventPanelAddButton() {
-    var address = document.getElementById('event-address').value;
+    var address = document.getElementsByName('event[address]')[0].value; // FIXME
     geocoder.geocode( { 'address': address}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         var placeData = placeToDataObject(results[0]);
@@ -147,21 +147,23 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
       new google.maps.LatLng(-33.8902, 151.1759),
       new google.maps.LatLng(-33.8474, 151.2631));
 
-    var input = document.getElementById('event-address');
-    var options = {
-  //    bounds: defaultBounds,
-      types: []  // all
-    };
+    var inputs = document.getElementsByName("event[address]");
+    for (var input in inputs) {
+      var options = {
+    //    bounds: defaultBounds,
+        types: []  // all
+      };
 
-    autocomplete = new google.maps.places.Autocomplete(input, options);
+      autocomplete = new google.maps.places.Autocomplete(input, options);
 
-    autocomplete.bindTo('bounds', map);
+      autocomplete.bindTo('bounds', map);
 
-    // setup places changed listener to add marker when changed
-    google.maps.event.addListener(autocomplete, 'place_changed', function() {
-      // save these results for when they hit the add event button
-      // var placeData = placeToDataObject(autocomplete.getPlace());
-    });
+      // setup places changed listener to add marker when changed
+      google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        // save these results for when they hit the add event button
+        // var placeData = placeToDataObject(autocomplete.getPlace());
+      });
+    }
   }
 
   function placeToDataObject(place) {
