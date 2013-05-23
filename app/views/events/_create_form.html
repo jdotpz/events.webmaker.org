@@ -1,7 +1,7 @@
 {% macro event_create_form() %}
 <div id="event-create">
 <h2>+ Add an event</h2>
-<form action="/events.json" method="POST">
+<form id="eventCreateForm" action="/events" method="POST">
     <fieldset>
         <label for="event[title]"> Name your event
         </label><textarea name="event[title]" rows=3 cols=45
@@ -31,6 +31,49 @@
         <label for="event[ends]">     Event ends </label>
         <input name="event[begins]" type="datetime-local" /><br />
     </fieldset>
+
+
+
+    <button type="submit">Submit</button>
+    <script>
+    $( "form#eventCreateForm" ).on( "submit", function( event ) {
+      event.preventDefault();
+
+      console.log( $(this).serializeArray() );
+
+      $.post($(this).attr('action'), $(this).serialize(), function(data) {
+
+        console.log(data);
+
+//        $('.result').html(data);
+       });
+
+    });
+    </script>
+
+
+
+
 </form>
 </div>
 {% endmacro %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
