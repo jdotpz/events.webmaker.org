@@ -13,9 +13,11 @@ function resFmt(fmts) {
         return fmts[fmt]();
     return res.format(fmts);
 }
-action('new', function () {
-    render('create', { event: new Event() });
-});
+function _subpage(subpage, data) {
+    data.subpage = subpage;
+    render(subpage, data);
+}
+
 // CREATE
 action(function create() {
     Event.create(req.body.event, function (err, event) {
@@ -30,7 +32,7 @@ action(function create() {
             html: function () {
                 if (err) {
                     flash('error', 'Event could not be created');
-                    render('create', { event: event });
+                    _subpage('create', { event: event });
                 } else {
                     flash('info', 'Event created');
                     redirect(path_to.events);
@@ -48,8 +50,9 @@ action(function index() {
                 send({ code: 200, data: events });
             },
             html: function () {
-                render('map', { title: 'Events Listing',
-                                events: events });
+                _subpage('map', {
+                    events: events, title: 'Events Listing',
+                });
             }
         })
     });
@@ -67,7 +70,7 @@ action(function show() {
             html: function () {
                 if (err || !event)
                     redirect(path_to.events);
-                render({ title: 'Event Details' });
+                _subpage('details', { event: event });
             }
         })
     });
