@@ -17,7 +17,7 @@ function Model(name, fields) {
 
 Model('Event', {
     title:          String,
-    description:    String,
+    description:    Text,
     address:        String,
     latitude:       Number,
     longitude:      Number,

@@ -1,3 +1,4 @@
+{% include "app/views/macros.html" %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,7 +11,7 @@
     {{ css('style') }}
     {% endblock %}
   </head>
-  <body id={{ page }} data-endpoint="http://makeapi.mofostaging.net/js/make-api.js">
+  <body id="{{ page }}" class="{{ subpage }}" data-endpoint="{{ makeEndpoint }}">
   <header>
     <div class="persona-mobile">
       <div class="fl">
@@ -112,7 +113,7 @@
     </section>
   </footer>
   <div class="mobile"></div>
-  <script src="http://makeapi.mofostaging.net/js/make-api.js"></script>
+  <script src="{{ makeEndpoint }}/js/make-api.js"></script>
   <script src="//www.mozilla.org/tabzilla/media/js/tabzilla.js"></script>
   <script src="/ext/js/packery.js"></script>
   <script src="/ext/js/require.js" data-main="/js/config"></script>
