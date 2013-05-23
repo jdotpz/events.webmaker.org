@@ -1,10 +1,14 @@
 requirejs.config({
-  deps: ['main', 'map'],
+  deps: ['main'],
   paths: {
-    'jquery': '../ext/js/jquery-1.9.1'
+    async: '../ext/js/async',
+    jquery: '../ext/js/jquery-1.9.1'
   },
   shim: {
-    'jquery': {
+    google: {
+      exports: 'google'
+    },
+    jquery: {
       exports: 'jQuery'
     }
   }

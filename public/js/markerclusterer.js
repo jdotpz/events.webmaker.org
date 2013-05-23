@@ -1,3 +1,4 @@
+define('markerclusterer', function(){
 /*jslint browser: true, confusion: true, sloppy: true, vars: true, nomen: false, plusplus: false, indent: 2 */
 /*global window,google */
 
@@ -1642,3 +1643,6 @@ MarkerClusterer.IMAGE_EXTENSION = "png";
  * @constant
  */
 MarkerClusterer.IMAGE_SIZES = [53, 56, 66, 78, 90];
+
+return MarkerClusterer;
+});
