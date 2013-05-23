@@ -3,6 +3,12 @@ module.exports = function (compound) {
     var express = require('express');
     var app = compound.app;
 
+    var nunjucks = require('nunjucks'),
+        nunjucksEnv = new nunjucks.Environment(
+            new nunjucks.FileSystemLoader(app.root + '/app/views'));
+    nunjucksEnv.express(app);
+
+
     app.configure(function(){
         app.use(express.static(app.root + '/public', { maxAge: 86400000 }));
         app.use(require('connect-assets')({
