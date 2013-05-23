@@ -1,0 +1,29 @@
+{% extends "app/views/layout.html" %}
+{% block title %}{{ event.title }}{% endblock %}
+{% block body %}
+<div id="event-details">
+    <div id="details-pane">
+        <div id="event-logo">
+        </div>
+        <span><div id="event-description">
+            <h1>{{ event.title }}</h1>
+            <div id="event-organizer">
+                <a href="">
+                    <img src="http://lorempixel.com/25/25/" />
+                    <span>Organized by <b>{{ event.organizer }}</b></span>
+                </a>
+            </div>
+            <p>{{ event.description }}</p>
+        </div></span>
+        <div id="event-registration">
+            <button src="{{ event.resource }}">Sign up for the event &gt;</button>
+            <p>This link will take you to an external event
+                    registration service, such as Eventbrite.</p>
+            </div>
+        <div id="bottom-stripe">
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}
