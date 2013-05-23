@@ -16,7 +16,8 @@ body#events .map-overlay {
         h2 {
             margin-top:     1px;
             margin-left:    4px;
-            padding:        14px 12px;
+            padding:        10px 12px;
+            padding-bottom: 14px;
 
             font-size:      20px;
             font-weight:    300;
@@ -26,17 +27,6 @@ body#events .map-overlay {
                 font-weight: bold;
             }
         }
-    }
-    form#find-event {
-        h2 {
-            display: inline-block;
-        }
-    }
-    form#create-event {
-        opacity:    0.90;
-        width:      100%;
-        margin-top: 10px;
-
         fieldset {
             display:    inline-block;
             border:     none;
@@ -47,26 +37,76 @@ body#events .map-overlay {
         label {
             display:    inline-block;
             width:      11em;
-            padding:    10px 0px;
+            padding-top: 8px;
 
             vertical-align: top;
+            font-size: 13px;
         }
-        .datetime {
-            display:    inline-block;
+        textarea,input,select {
+            background: white;
+            outline:    none;
+            border:     0.5px solid #444;
+            margin:     5px;
+
+            vertical-align: middle;
+            font-size:  13px;
         }
         textarea {
             width:      20em;
-        }
-        textarea,input,select {
-            outline:    none;
-            border:     1px solid #444;
-            margin:     5px;
             padding:    8px 10px;
-
-            vertical-align: bottom;
         }
-        select {
-            background: white;
+        input,select {
+            height:     5ex;
+            padding:    0px 10px;
+        }
+        button[type="submit"] {
+            border:     0px;
+
+            color: #fff;
+            font-size: 20px;
+
+            background: #e1000b;
+            &:hover  { background: #ee1c25; }
+            &:active { background: #d7000a; }
+        }
+    }
+    form#find-event {
+        display: inline-block;
+
+        padding-right: 8px;
+        padding-left: 2px;
+
+        h2 {
+            margin: 0px;
+            display: inline-block;
+
+            vertical-align: middle;
+        }
+        input {
+            margin-left:    0px;
+
+            vertical-align: middle;
+            font-size:  13px;
+        }
+        button[type="submit"] {
+            height: 5ex;
+            width:  5ex;
+
+            font-size: 13px;
+            vertical-align: middle;
+
+            span {
+                font-size: 24px;
+            }
+        }
+    }
+    form#create-event {
+        opacity:    0.85;
+        width:      100%;
+        margin-top: 10px;
+
+        .datetime {
+            display:    inline-block;
         }
         .upload {
             display: inline-block;
@@ -88,15 +128,10 @@ body#events .map-overlay {
             display: none;
         }
         button[type="submit"] {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: #e1000b;
-            border: 0px;
-            padding: 12px 18px;
-
-            color: #fff;
-            font-size: 21px;
+            position:   absolute;
+            bottom:     15px;
+            right:      15px;
+            padding:    12px 18px;
         }
     }
 }
