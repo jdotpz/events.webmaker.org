@@ -1,12 +1,108 @@
 {% extends "app/views/layout.html" %}
-{% include "app/views/events/_create_form.html" %}
-{% block title %}Map{% endblock %}
+{% block title %}Event Map{% endblock %}
 
 {% block body %}
 
-  {{ event_create_form() }}
+<div class="map-overlay">
 
-  <div id="map-canvas"></div>
+    <form id="find-event" action="/events" method="GET">
+        <h2><span class="search-symbol">Q</span> Find an event</h2>
+        <input name="event[address]" type="text" />
+    </form>
+
+    <form id="create-event" action="/events" method="POST">
+        <h2>+ Add an event</h2>
+        <fieldset>
+            <label for="event[title]"> Name your event </label>
+            <textarea name="event[title]" rows=3 cols=40
+                placeholder="Use an awesome title so people will come!"></textarea><br />
+
+            <label for="event[description]"> Describe your event </label>
+            <textarea name="event[description]" rows=10 cols=40
+                placeholder="Tell people a few more details about your event. What can they expect?"></textarea><br />
+        </fieldset>
+        <fieldset>
+            <label for="event[attendees]"> How many attendees are you expecting? </label>
+            <select name="event[attendees]">
+                <option value=0> 1-10 </option>
+                <option value=1> 10-20 </option>
+                <option value=2> 20-50 </option>
+                <option selected
+                        value=3> 50-100 </option>
+                <option value=4> 100-200 </option>
+                <option value=5> 200-500 </option>
+                <option value=5> 500+ </option>
+            </select><br />
+
+            <label for="event[address]"> Event location </label>
+            <input name="event[address]" type="text" /><br />
+
+            <label for="event[beginDate]"> Event begins </label>
+            <div class='datetime'>
+                <input name="event[beginDate]" type="date" />
+                <input name="event[beginTime]" type="time" />
+            </div><br />
+
+            <label for="event[endDate]"> Event ends </label>
+            <div class='datetime'>
+                <input name="event[endDate]" type="date" />
+                <input name="event[endTime]" type="time" />
+            </div><br />
+
+            <div class="upload">
+                <input name="event[logo]" type="file" accept="image/*" />
+                <div id="image-upload">Upload an image</div>
+            </div>
+
+            <button type="submit">+ Submit your event</button>
+        </fieldset>
+
+        <script>
+            var file_input = $('input[type="file"]');
+            var upload_div = $('#image-upload');
+            upload_div.on("click", function(ev) {
+                file_input.click();
+                ev.preventDefault();
+            }).on("dragenter dragover drop", function(ev) {
+                ev.stopPropagation();
+                ev.preventDefault();
+            }).on("drop", function(ev) {
+                handleImg(ev.dataTransfer.files[0]);
+            });
+            file_input.on("change", function (ev) {
+                handleImg(this.files[0]);
+            });
+
+            // based on MDN example
+            function handleImg(file) {
+                if (file.type.match(/image.*/)) {
+                    upload_div.html("<img />");
+                    var img = upload_div.find("img")[0];
+                    img.file = file;
+
+                    var reader = new FileReader();
+                    reader.onload = (function(img) {
+                        return function(ev) {
+                            img.src = ev.target.result;
+                        };
+                    })(img);
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            $("form#eventCreateForm").on("submit", function(ev) {
+                console.log(this.serializeArray());
+                $.post(this.attr('action'), this.serialize(), function(data) {
+                    console.log(data);
+                });
+                ev.preventDefault();
+            });
+        </script>
+    </form>
+    </div>
+</div>
+  
+<div id="map-canvas"></div>
 
 {% endblock %}
 

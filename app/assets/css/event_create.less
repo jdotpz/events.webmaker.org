@@ -1,44 +1,97 @@
-body#events #event-create-form {
-    width:      100%;
-    background: #323232;
-    opacity:    0.75;
-    padding:    12px;
+body#events .map-overlay {
+    position:    absolute;
+    z-index:     1;
+    margin: 20px;
 
     color:  #fafafa;
 
-    h2 {
-        margin-top:     1px;
-        margin-left:    3px;
-
-        font-size:  21px;
-    }
     form {
+        background: #323232;
+
+        h2 {
+            margin-top:     1px;
+            margin-left:    4px;
+            padding:        14px 12px;
+
+            font-size:      20px;
+            font-weight:    300;
+
+            .search-symbol {
+                color: #777;
+                font-weight: bold;
+            }
+        }
+    }
+    form#find-event {
+        h2 {
+            display: inline-block;
+        }
+    }
+    form#create-event {
+        opacity:    0.90;
+        width:      100%;
+        margin-top: 10px;
+
         fieldset {
-            border:     none;
             display:    inline-block;
+            border:     none;
+            margin-left: 10px;
+
             vertical-align: top;
+        }
+        label {
+            display:    inline-block;
+            width:      11em;
+            padding:    10px 0px;
 
-            label {
-                display:    inline-block;
-                width:      10em;
-                padding:    5px;
+            vertical-align: top;
+        }
+        .datetime {
+            display:    inline-block;
+        }
+        textarea {
+            width:      20em;
+        }
+        textarea,input,select {
+            outline:    none;
+            border:     1px solid #444;
+            margin:     5px;
+            padding:    8px 10px;
 
-                vertical-align: top;
-            }
-            textarea,input,select {
-                outline:    none;
-                border:     1px solid #444;
-                padding:    8px 10px;
-            }
-            textarea,input {
-                margin:     5px;
-            }
-            select {
-                background: white;
-                margin:     5px 9px;
+            vertical-align: bottom;
+        }
+        select {
+            background: white;
+        }
+        .upload {
+            display: inline-block;
+            margin: 10px 0px;
+        }
+        #image-upload {
+            display: table-cell;
+            cursor: pointer; cursor: hand;
+            width: 125px;
+            height: 80px;
+            border: 1px #fff dashed;
+            border-radius: 6px;
 
-                vertical-align: middle;
-            }
+            font-size: 13px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        button[type="submit"] {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: #e1000b;
+            border: 0px;
+            padding: 12px 18px;
+
+            color: #fff;
+            font-size: 21px;
         }
     }
 }
