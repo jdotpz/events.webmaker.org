@@ -13,6 +13,9 @@ body#events .map-overlay {
     form {
         background: #323232;
 
+        h2,label,textarea,input,select,button {
+            font-family:    OpenSans;
+        }
         h2 {
             margin-top:     1px;
             margin-left:    4px;
@@ -21,11 +24,6 @@ body#events .map-overlay {
 
             font-size:      20px;
             font-weight:    300;
-
-            .search-symbol {
-                color: #777;
-                font-weight: bold;
-            }
         }
         fieldset {
             display:    inline-block;
@@ -40,7 +38,7 @@ body#events .map-overlay {
             padding-top: 8px;
 
             vertical-align: top;
-            font-size: 13px;
+            font-size:      13px;
         }
         textarea,input,select {
             background: white;
@@ -49,7 +47,7 @@ body#events .map-overlay {
             margin:     5px;
 
             vertical-align: middle;
-            font-size:  13px;
+            font-size:      13px;
         }
         textarea {
             width:      20em;
@@ -77,10 +75,14 @@ body#events .map-overlay {
         padding-left: 2px;
 
         h2 {
-            margin: 0px;
-            display: inline-block;
+            margin:         0px;
+            display:        inline-block;
 
             vertical-align: middle;
+
+            .icon-search {
+                color: #888;
+            }
         }
         input {
             margin-left:    0px;
@@ -95,15 +97,23 @@ body#events .map-overlay {
             font-size: 13px;
             vertical-align: middle;
 
-            span {
-                font-size: 24px;
+            .icon-chevron-right {
+                color:      #f2f2f2;
+                font-size:  16px;
             }
         }
     }
     form#create-event {
-        opacity:    0.85;
+        opacity:    0.88;
         width:      100%;
         margin-top: 10px;
+
+        h2 {
+            .icon-plus {
+                font-size: 18px;
+                margin-right: 4px;
+            }
+        }
 
         .datetime {
             display:    inline-block;
@@ -132,6 +142,14 @@ body#events .map-overlay {
             bottom:     15px;
             right:      15px;
             padding:    12px 18px;
+            padding-bottom: 14px;
+
+            font-size: 22;
+
+            .icon-plus {
+                font-size: 17px;
+                margin-right: 4px;
+            }
         }
     }
 }

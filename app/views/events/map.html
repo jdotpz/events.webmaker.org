@@ -7,14 +7,14 @@
 <div class="map-overlay">
 
     <form id="find-event" action="/events" method="GET">
-        <h2><span class="search-symbol">Q</span> Find an event</h2>
+        <h2><span class="icon-search"></span> Find an event</h2>
         <input name="find-where" type="text" placeholder="Where?" />
         <input name="find-when"  type="text" placeholder="When?" />
-        <button type="submit"><span>&gt;</span></button>
+        <button type="submit"><span class="icon-chevron-right"></span></button>
     </form>
 
     <form id="create-event" action="/events" method="POST" enctype="multipart/form-data">
-        <h2>+ Add an event</h2>
+        <h2><span class="icon-plus"></span> Add an event</h2>
         <fieldset>
             <label for="event[title]"> Name your event </label>
             <textarea name="event[title]" rows=3 cols=40
@@ -57,7 +57,7 @@
                 <div id="image-upload">Upload an image</div>
             </div>
 
-            <button type="submit">+ Submit your event</button>
+            <button type="submit"><span class="icon-plus"></span> Submit your event</button>
         </fieldset>
 
         <script>
