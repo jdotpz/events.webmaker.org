@@ -1,10 +1,4 @@
 load('application');
-layout(false);
-
-before('set page name for template', function () {
-    this.page = 'events';
-    next();
-});
 
 function resFmt(fmts) {
     // Optional Content-Type override via 'format' query-parameter.
@@ -14,6 +8,7 @@ function resFmt(fmts) {
     return res.format(fmts);
 }
 function _subpage(subpage, data) {
+    data.page    = 'events';
     data.subpage = subpage;
     render(subpage, data);
 }
@@ -23,21 +18,11 @@ action(function create() {
     Event.create(req.body.event, function (err, event) {
         resFmt({
             json: function () {
-                if (err) {
-                    send({code: 500, error: event && event.errors || err});
-                } else {
-                    send({code: 200, data: event.toObject()});
-                }
+                if (err)
+                    res.send(500, { error: event && event.errors || err });
+                else
+                    res.send(200, event);
             },
-            html: function () {
-                if (err) {
-                    flash('error', 'Event could not be created');
-                    _subpage('create', { event: event });
-                } else {
-                    flash('info', 'Event created');
-                    redirect(path_to.events);
-                }
-            }
         })
     })
 });
@@ -47,12 +32,10 @@ action(function index() {
     Event.all(function (err, events) {
         resFmt({
             json: function () {
-                send({ code: 200, data: events });
+                res.send(200, events);
             },
             html: function () {
-                _subpage('map', {
-                    events: events, title: 'Events Listing',
-                });
+                _subpage('map', { events: events });
             }
         })
     });
@@ -64,8 +47,9 @@ action(function show() {
         resFmt({
             json: function () {
                 if (err || !event)
-                    return send({code: 404, error: 'Not found'});
-                send({ code: 200, data: event });
+                    res.send(404, { error: 'Not found' });
+                else
+                    res.send(200, event);
             },
             html: function () {
                 if (err || !event)

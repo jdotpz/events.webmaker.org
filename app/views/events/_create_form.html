@@ -1,20 +1,20 @@
 {% macro event_create_form() %}
-<div id="event-create">
+<div id="event-create-form">
 <h2>+ Add an event</h2>
 <form id="eventCreateForm" action="/events" method="POST">
     <fieldset>
-        <label for="event[title]"> Name your event
-        </label><textarea name="event[title]" rows=3 cols=45
+        <label for="title"> Name your event
+        </label><textarea name="title" rows=3 cols=45
             placeholder="Use an awesome title so people will come!"
         ></textarea><br />
-        <label for="event[description]"> Describe your event
-        </label><textarea name="event[description]" rows=3 cols=45
+        <label for="description"> Describe your event
+        </label><textarea name="description" rows=3 cols=45
             placeholder="Tell people a few more details about your event. What can they expect?"
         ></textarea><br />
     </fieldset>
     <fieldset>
-        <label  for="event[attendees]"> How many attendees are you expecting?
-        </label><select name="event[attendees]">
+        <label  for="attendees"> How many attendees are you expecting?
+        </label><select name="attendees">
             <option value=0> 1-10 </option>
             <option value=1> 10-20 </option>
             <option value=2> 20-50 </option>
@@ -24,12 +24,14 @@
             <option value=5> 200-500 </option>
             <option value=5> 500+ </option>
         </select><br />
-        <label for="event[location]"> Event location </label>
-        <input name="event[location]" type="text" id="event-address"/><br />
-        <label for="event[begins]">   Event begins </label>
-        <input name="event[begins]" type="datetime-local" /><br />
-        <label for="event[ends]">     Event ends </label>
-        <input name="event[begins]" type="datetime-local" /><br />
+        <label for="location"> Event location </label>
+        <input name="location" type="text" id="event-address"/><br />
+        <label for="beginDate"> Event begins </label>
+            <input name="beginDate" type="date" />
+            <input name="beginTime" type="time" /><br />
+        <label for="endDate"> Event ends </label>
+            <input name="endDate" type="date" />
+            <input name="endTime" type="time" /><br />
     </fieldset>
 
 

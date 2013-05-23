@@ -2,23 +2,10 @@
 {% include "app/views/events/_create_form.html" %}
 {% block title %}Map{% endblock %}
 
-<!--set this variable to change the template's behavior-->
-{% set mapPage = 1 %}
 
-<!--not using this for the map-->
 {% block body %}
 
 {{ event_create_form() }}
-
-  <!--&lt;!&ndash;GeoCoding input field&ndash;&gt;-->
-  <!--<div id="event-panel">-->
-    <!--<input id="event-title" type="textbox" value="" placeholder="Title">  <br/>-->
-    <!--<input id="event-date" type="textbox" value="" placeholder="Date">  <br/>-->
-    <!--<input id="event-description" type="textbox" value="" placeholder="Description">  <br/>-->
-    <!--<input id="event-organizer" type="textbox" value="" placeholder="Organizer">  <br/>-->
-    <!--<input id="event-address" type="textbox" value="" placeholder="Address of Event">-->
-    <!--<input id="event-button" type="button" value="Add Event" onclick="eventPanelAddButton()">-->
-  <!--</div>-->
 
   <div id="map-canvas"></div>
 
