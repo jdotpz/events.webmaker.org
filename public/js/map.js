@@ -23,7 +23,9 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
   }
 
   function seedModels() {
-    jsonData = '[{"title":"Writing tests can be fun","address":"94117 Grove Street, San Francisco, CA","date":"Thursday June 23rd at 3pm","description":"Tests can be fun if you know what your doing. Learn how here.","organizer":"Joey Bishop","location":{"lat":37.7755105,"lng":-122.44130139999999}},{"title":"Coding with Ruby","address":"4255 24th Street, San Francisco, CA","date":"Thurs July 23, 2014","description":"Learn to code Ruby with the guys from Amoeba.","organizer":"Amoe.ba","location":{"lat":37.750842,"lng":-122.43751500000002}},{"title":"Code by the Park","address":"94114 Abbey Street, San Francisco, CA","date":"Friday, January 2nd, 2pm","description":"Sit around Dolores Park and write code","organizer":"Sara Williams","location":{"lat":37.7635132,"lng":-122.42722679999997}},{"title":"Cobol for the Web","address":"94102 Franklin Street, San Francisco, CA","date":"Friday June 23rd, 3pm - 8pm","description":"Don\'t want to learn those new fancy smancy languages like Javascript?  Use Cobol!","organizer":"Dr. Dirk Dirkland","location":{"lat":37.7784056,"lng":-122.42160580000001}},{"title":"Coding with Python","address":"660 York Street, San Francisco, CA","date":"Wed March 23, 2014","description":"Learn to code Python with the guys from Amoeba.","organizer":"Amoe.ba","location":{"lat":37.7608724,"lng":-122.40920990000001}}]';
+    jsonData = '[{"title":"Writing tests can be fun","address":"94117 Grove Street, San Francisco, CA","date":"Thursday June 23rd at 3pm","description":"Tests can be fun if you know what your doing. Learn how here.","organizer":"Joey Bishop","location":{"lat":37.7755105,"lng":-122.44130139999999}},' +
+      '{"title":"Writing tests can be phun","address":"94117 Grove Street, San Francisco, CA","date":"Thursday June 23rd at 3pm","description":"Tests can be fun if you know what your doing. Learn how here.","organizer":"Joey Bishop","location":{"lat":37.7755105,"lng":-122.44130139999999}},' +
+      '{"title":"Coding with Ruby","address":"4255 24th Street, San Francisco, CA","date":"Thurs July 23, 2014","description":"Learn to code Ruby with the guys from Amoeba.","organizer":"Amoe.ba","location":{"lat":37.750842,"lng":-122.43751500000002}},{"title":"Code by the Park","address":"94114 Abbey Street, San Francisco, CA","date":"Friday, January 2nd, 2pm","description":"Sit around Dolores Park and write code","organizer":"Sara Williams","location":{"lat":37.7635132,"lng":-122.42722679999997}},{"title":"Cobol for the Web","address":"94102 Franklin Street, San Francisco, CA","date":"Friday June 23rd, 3pm - 8pm","description":"Don\'t want to learn those new fancy smancy languages like Javascript?  Use Cobol!","organizer":"Dr. Dirk Dirkland","location":{"lat":37.7784056,"lng":-122.42160580000001}},{"title":"Coding with Python","address":"660 York Street, San Francisco, CA","date":"Wed March 23, 2014","description":"Learn to code Python with the guys from Amoeba.","organizer":"Amoe.ba","location":{"lat":37.7608724,"lng":-122.40920990000001}}]';
 
     var result = JSON.parse(jsonData);
 
@@ -46,6 +48,7 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     });
 
     markerManager.addMarker(marker);
+    oms.addMarker(marker);  // must keep oms in sync
 
     // model needs organizerURL and detailsURL, add them here
     var copiedModel = $.extend({}, model);
@@ -56,10 +59,6 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     // store the content for the info window in the marker
     marker.set('infoContent', infoWindowContent(copiedModel));
     marker.set('model', model);
-
-    google.maps.event.addListener(marker, 'click', function() {
-      showInfoForMarker(this);
-    });
 
     return marker;
   }
@@ -328,7 +327,6 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     theDiv.text('Log Markers');
     theDiv.appendTo($('#map-canvas').parent());
     theDiv.click(logMarkers);
-
   }
 
   function closeInfoWindow() {
@@ -467,6 +465,9 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
 
       // this handles the multiple markers at the same location problem.
       oms = new OverlappingMarkerSpiderfier(map);
+      oms.addListener('click', function(marker, event) {
+        showInfoForMarker(marker);
+      });
 
       addDeleteAndLogButtons();
 
