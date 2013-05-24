@@ -142,27 +142,21 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     });
   }
 
-  function setupAutocomplete() {
+  function setupAutocomplete(itemName, cityLevel) {
     var defaultBounds = new google.maps.LatLngBounds(
       new google.maps.LatLng(-33.8902, 151.1759),
-      new google.maps.LatLng(-33.8474, 151.2631));
+      new google.maps.LatLng(-33.8474, 151.2631)
+    );
 
-    var inputs = document.getElementsByName("event[address]");
+    var inputs = document.getElementsByName(itemName);
     for (var index in inputs) {
       var options = {
     //    bounds: defaultBounds,
-        types: []  // all
+        types: cityLevel ? ['country'] : []
       };
 
       var autocomplete = new google.maps.places.Autocomplete(inputs[index], options);
-
       autocomplete.bindTo('bounds', map);
-
-      // setup places changed listener to add marker when changed
-      google.maps.event.addListener(autocomplete, 'place_changed', function() {
-        // save these results for when they hit the add event button
-        // var placeData = placeToDataObject(autocomplete.getPlace());
-      });
     }
   }
 
@@ -462,7 +456,8 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
       map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
       setColorOptions();
-      setupAutocomplete();
+      setupAutocomplete("event[address]", false);
+      setupAutocomplete("find-where", true);
       setupSharedInfoWindow();
 
       // this handles the multiple markers at the same location problem.
