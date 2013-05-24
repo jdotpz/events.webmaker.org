@@ -2,7 +2,7 @@ module.exports =
   { "development":
     { "driver":   "mysql"
       , "host":     "localhost"
-      , "post":     3306
+      , "port":     3306
       , "database": "webmaker"
       , "username": "root"
       , "password": ""
@@ -10,15 +10,15 @@ module.exports =
   , "test":
     { "driver":   "mysql"
       , "host":     "localhost"
-      , "post":     3306
+      , "port":     3306
       , "database": "webmaker"
       , "username": "root"
       , "password": ""
     }
   , "production":
     { "driver":   "mysql"
-      , "host":     "localhost"
-      , "post":     3306
+      , "host":     "us-cdbr-east-03.cleardb.com"
+      , "port":     3306
       , "database": "heroku_aa5f82c502bce25"
       , "username": "b8c4154ee4f6da"
       , "password": "daf9b594"
