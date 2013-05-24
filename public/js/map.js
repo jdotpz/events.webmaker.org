@@ -505,6 +505,16 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
       setupSharedInfoWindow();
       updateLocation();
 
+
+      // setup form toggle button
+      $("h2.formExpandButton").click(function(e) {
+        e.preventDefault();
+
+        $("form#create-event").toggleClass('toggleHidden');
+        $("#add-event-button").toggleClass('toggleHidden');
+      });
+
+
       // this handles the multiple markers at the same location problem.
       oms = new OverlappingMarkerSpiderfier(map);
       oms.addListener('click', function(marker, event) {
