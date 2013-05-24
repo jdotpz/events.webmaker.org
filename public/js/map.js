@@ -2,7 +2,6 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
   function ($, google, InfosBubble, MarkerClusterer/*, window.overlappingMarkerSpiderfier*/) {
 
   var map;
-  var whereAutoComplete;
   var oms;
   var geocoder;
   var infoWindow;
@@ -399,14 +398,13 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     infoWindow.open(map, marker);
   }
 
-
   function getCurrentPosition_success(pos) {
     var crd = pos.coords;
    
-  //  console.log('Your current position is:');
-  //  console.log('Latitude : ' + );
-  //  console.log('Longitude: ' + );
-  //  console.log('More or less ' + crd.accuracy + ' meters.');
+//    console.log('Your current position is:');
+//    console.log('Latitude : ' + crd.latitude);
+//    console.log('Longitude: ' + crd.longitude);
+//    console.log('More or less ' + crd.accuracy + ' meters.');
 
     var mapCenter = new google.maps.LatLng(crd.latitude, crd.longitude);
     map.setCenter(mapCenter);
@@ -424,8 +422,6 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
       };
 
     if (navigator.geolocation) {
-       console.log('ok');
-
       navigator.geolocation.getCurrentPosition(getCurrentPosition_success, getCurrentPosition_error, options);
     } else {
       console.log("Sorry - your browser doesn't support geolocation!");
@@ -489,7 +485,7 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
       map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
       setupAutocomplete("event[address]", false);
-      whereAutoComplete = setupAutocomplete("find-where", true);
+      setupAutocomplete("find-where", true);
       setupSharedInfoWindow();
       updateLocation();
 
