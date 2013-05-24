@@ -1,19 +1,26 @@
 { "name": "webmaker.org"
 , "version": "0.0.1"
 , "engines": ["node >= 0.8.0"]
+, "private": true
 , "main": "server.js"
+, "repository":
+  { "type": "git"
+  , "url": "git://github.com/AmoebaConsulting/webmaker.org-compound.git"
+  }
+, "license": "MPL-2.0"
 , "dependencies":
-  { "nunjucks": "0.1.8a"
-  , "express": "~3.x"
+  { "express": "3.2.0"
   , "compound": ">= 1.1.0"
-  , "jugglingdb": ">= 0.1.0"
-  , "less": "latest"
-  , "seedjs": "latest"
   , "connect-assets": "*"
+  , "nunjucks": "0.1.8a"
+  , "less": "latest"
   , "jugglingdb": "0.2.x"
   , "jugglingdb-mysql": "latest"
-  },
-  "devDependencies":
+  , "seedjs": "latest"
+  , "express-persona": "0.0.7"
+  , "webmaker-loginapi": "0.1.1"
+  }
+, "devDependencies":
   { "nodeunit": "*"
   , "sinon": "*"
   , "supertest": ">= 0"

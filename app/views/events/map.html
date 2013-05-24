@@ -10,6 +10,7 @@
         <h2><span class="icon-search"></span> Find an event</h2>
         <input name="find-where" type="text" placeholder="Where?" />
         <input name="find-when"  type="text" placeholder="When?" />
+        <input name="_csrf" type="hidden" value="{{ csrf_token }}" />
         <button type="submit"><span class="icon-chevron-right"></span></button>
     </form>
 
@@ -56,6 +57,7 @@
                 <input name="event[logo]" type="file" accept="image/*" />
                 <div id="image-upload">Upload an image</div>
             </div>
+            <input name="_csrf" type="hidden" value="{{ csrf_token }}" />
 
             <button type="submit"><span class="icon-plus"></span> Submit your event</button>
         </fieldset>
