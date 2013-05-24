@@ -152,7 +152,9 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     for (var i=0;i<inputs.length;i++) {
       var options = {
     //    bounds: defaultBounds,
-        types: [] // cityLevel ? ['country'] : []
+        types: cityLevel ? ['(regions)'] : []  // [] is all
+
+
       };
 
       var autocomplete = new google.maps.places.Autocomplete(inputs[i], options);
