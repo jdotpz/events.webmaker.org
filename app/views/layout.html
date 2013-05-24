@@ -7,11 +7,39 @@
     {% block head %}
     <link rel="stylesheet" href="/ext/css/font-awesome.css">
     <link href="//www.mozilla.org/tabzilla/media/css/tabzilla.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ loginAPI }}/css/nav.css" />
+    <meta name="persona-email" content="{{ email }}">
     <script type="text/javascript" src="/ext/js/jquery-1.9.1.js"></script>
     {{ css('style') }}
     {% endblock %}
   </head>
   <body id="{{ page }}" class="{{ subpage }}" data-endpoint="{{ makeEndpoint }}">
+
+  <div id="webmaker-nav">
+    <nav class="webmaker-nav-container">
+      <ul class="webmaker-nav primary">
+        <li><a>Webmaker</a></li>
+      </ul>
+      <ul class="webmaker-nav secondary">
+      </ul>
+      <ul class="webmaker-nav custom">
+      </ul>
+      <ul class="webmaker-nav user-info">
+        <li class="user">
+          <div class="user-name">
+            <span id="identity" class="user-name-container"></span>
+          </div>
+        </li>
+        <li>
+          <button id="webmaker-login" class="access-button hidden">Login</button>
+          <button id="webmaker-logout" class="access-button hidden">Logout</button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <script src="https://login.persona.org/include.js"></script>
+  <script src="{{ loginAPI }}/js/sso-ux.js"></script>
+
   <header>
     <div class="persona-mobile">
       <div class="fl">
@@ -46,13 +74,44 @@
           <li><a {% if page == 'learn' %}class="on"{% endif %} id="nav-learn" href="/learn">Learn</a></li>
           <li><a {% if page == 'teach' %}class="on"{% endif %} id="nav-teach" href="/teach">Teach</a></li>
           <li><a {% if page == 'events' %}class="on"{% endif %} id="nav-events" href="/events">Events</a></li>
-          <li><a {% if page == 'search' %}class="on"{% endif %} class="icon-search" id="nav-search" href="/search"></a></li>
+          <li><a class="search-trigger icon-search{% if page == 'search' %} on{% endif %}" id="nav-search" href="javascript:;"></a></li>
         </ul>
       </nav>
     </div>
   </header>
+  <div id="search">
+    <div class="search-wrapper">
+      <div class="search-bar">
+        <label for="search-keyword">Search</label>
+        <div class="ui-append ui-input">
+          <input type="text" name="keyword" id="search-keyword" placeholder="What do you want to search for?">
+          <a class="icon icon-search"></a>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <label for="search-filter">Filter results</label>
+          <div id="search-filter" class="ui-append ui-select">
+            <span class="ui-selected ui-medium"></span>
+            <a class="icon icon-chevron-down"></a>
+            <div class="ui-select-menu">
+              <ul>
+                <li data-value="recent" data-selected>Recent</li>
+                <li data-value="featured">Featured</li>
+                <li data-value="popcorn">Popcorn Makes</li>
+                <li data-value="thimble:project">Thimble Makes</li>
+                <li data-value="event">Made at an Event</li>
+              </ul>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
   <main id="content" class="content clearfix">{% block body %}{% endblock %}</main>
   <footer class="footer">
+    <div id="footer-actions">
+      <button id="bottom-search-btn">Search</button>
+      <button class="load-more">Load more <span class="icon-chevron-right"></span></button>
+    </div>
     <section class="make-footer">
       <div class="make-wrapper">
         <div class="make-footer-item">
