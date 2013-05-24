@@ -35,7 +35,7 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
   // for the demo only
   function megaMarkers() {
     var one = '{"title":"Writing tests can be fun","address":"94117 Grove Street, San Francisco, CA","date":"Thursday June 23rd at 3pm","description":"Tests can be fun if you know what your doing. Learn how here.","organizer":"Joey Bishop","location":{"lat":37.7755105,"lng":-122.43130139999999}}';
-    var jsonData = '[';
+    var jsonData = '[' + one;
 
     for (var i=0;i<49;i++) {
       jsonData += "," + one;
