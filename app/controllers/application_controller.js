@@ -15,6 +15,6 @@ before('set user session', function () {
 before(function () {
     this.makeEndpoint = app.get("MAKE_ENDPOINT");
     this.personaSSO   = app.get("AUDIENCE");
-    this.loginURL     = app.get("LOGIN");
+    this.loginAPI     = app.get("LOGIN");  // minor misnomer (loginAPI vs loginURL)
     next();
 });

@@ -66,6 +66,7 @@ body#events .map-overlay {
             background: #e1000b;
             &:hover  { background: #ee1c25; }
             &:active { background: #d7000a; }
+            .clickable
         }
     }
     form#find-event {
@@ -121,9 +122,11 @@ body#events .map-overlay {
             display: inline-block;
             margin: 10px 0px;
         }
+        input[name="event[address]"] {
+            width: 20em;
+        }
         #image-upload {
             display: table-cell;
-            cursor: pointer; cursor: hand;
             width: 125px;
             height: 80px;
             border: 1px #fff dashed;
@@ -132,6 +135,7 @@ body#events .map-overlay {
             font-size: 13px;
             text-align: center;
             vertical-align: middle;
+            .clickable;
         }
         input[type="file"] {
             display: none;
@@ -141,7 +145,7 @@ body#events .map-overlay {
             bottom:     15px;
             right:      15px;
             padding:    12px 18px;
-            padding-bottom: 14px;
+            padding-bottom: 13px;
 
             font-size: 22;
 

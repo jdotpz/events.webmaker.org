@@ -9,7 +9,7 @@
     <form id="find-event" action="/events" method="GET">
         <h2><span class="icon-search"></span> Find an event</h2>
         <input name="find-where" type="text" placeholder="Where?" />
-        <input name="find-when"  type="text" placeholder="When?" />
+        <input name="find-when"  type="date" placeholder="When?" />
         <input name="_csrf" type="hidden" value="{{ csrf_token }}" />
         <button type="submit"><span class="icon-chevron-right"></span></button>
     </form>
@@ -44,7 +44,7 @@
             </select><br />
 
             <label for="event[address]"> Event location </label>
-            <input name="event[address]" type="text" style='width: 257px;'/><br />
+            <input name="event[address]" type="text" /><br />
 
             <label for="event[beginDate]"> Event begins </label>
             <div class='datetime'>
@@ -59,7 +59,8 @@
             </div><br />
 
             <div class="upload">
-                <input name="event[logo]" type="file" accept="image/*" />
+                <input type="file" accept="image/*" />
+                <input name="event[picture]" type="hidden" />
                 <div id="image-upload">Upload an image</div>
             </div>
             <input name="_csrf" type="hidden" value="{{ csrf_token }}" />
@@ -94,6 +95,7 @@
                     reader.onload = (function(img) {
                         return function(ev) {
                             img.src = ev.target.result;
+                            $('.upload input[name="event[picture]"]')[0].value = img.src;
                         };
                     })(img);
                     reader.readAsDataURL(file);

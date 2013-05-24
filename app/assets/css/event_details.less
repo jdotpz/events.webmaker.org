@@ -1,6 +1,29 @@
 body#events.details {
     background: #23B881;
+    background: #0AAA6D;
 
+    .temporal-local {
+        display:    inline-block;
+        margin:     4px;
+
+        .datetime-range,.address {
+            display: inline-block;
+            margin: 0px 4px;
+            font-size: 14px;
+        }
+        img.calendar-icon {
+            width:  17px;
+            margin-top: 2px;
+
+            vertical-align: top;
+        }
+        img.pin-icon {
+            width:      16px;
+            margin-top: -1px;
+
+            vertical-align: top;
+        }
+    }
     #details-pane {
         background: white;
         width:      100%;
@@ -8,19 +31,53 @@ body#events.details {
         border-radius:  4px;
         margin:     30px auto;
 
-        #event-logo {
-            background: #DFD951;
-            height:     600px;
-            width:      380px;
+        .gallery-sidebar {
             float:      left;
+        }
+        #event-picture {
+            background: #DFD951;
 
             margin:     11px;
             margin-right: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
 
             vertical-align: top;
 
-            img {
+            img { }
+        }
+        #event-registration {
+            width:      400px;
+            padding-bottom: 40px;
+            text-align: center;
+
+            #registerLink {
+                display:    inline-block;
+                background: #4F74BB;
+                border-radius: 7px;
+                border:     1px solid #ccc;
+                margin:     20px auto;
+                padding:    15px 20px;
+
+                color:      #eee;
+                font-size:  20px;
+
+                .icon-chevron-right {
+                    color:      #f2f2f2;
+                    font-size:  16px;
+                }
+                .clickable;
+                &:hover {
+                    background: #517CCB;
+                }
+                &:active {
+                    background: #4062A1;
+                }
+            }
+            p {
+                width:      320px;
+                margin:     0px auto;
+
+                color: #888;
             }
         }
         #event-description {
@@ -38,50 +95,30 @@ body#events.details {
                 line-height: 25px;
             }
             #event-organizer {
-                height: 60px;
+                height:     60px;
+                margin-top: 10px;
 
-                a { color:  #888; }
+                color:      #888;
+
                 img {
-                    height: 40px;
-                    width:  40px;
+                    height: 35px;
+                    width:  35px;
                     border-radius: 40px;
                 }
                 span {
                     font-size: 14px;
-                    vertical-align: 80%;
                     padding-left: 5px;
 
-                    b { }
+                    vertical-align: 80%;
                 }
-            }
-        }
-        #event-registration {
-            width:      400px;
-            padding-bottom: 40px;
-
-            button {
-                display:    block;
-                background: #4F74BB;
-                border-radius: 7px;
-                border:     1px solid #ccc;
-                margin:     20px auto;
-                padding:    15px 20px;
-
-                color:      #eee;
-                font-size:  20px;
-            }
-            p {
-                width:      320px;
-                margin:     0px auto;
-
-                color: #888;
-                text-align: center;
+                .clickable;
             }
         }
         #bottom-stripe {
             background: #FEA300;
             width:      100%;
             height:     6px;
+            margin-top: 1ex;
 
             border-radius: 0px 0px 4px 4px;
         }

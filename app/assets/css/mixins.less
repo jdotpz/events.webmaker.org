@@ -59,6 +59,14 @@
   transition: transform @time;
 }
 
+.clickable {
+  cursor: pointer; cursor: hand;
+  text-decoration: none;
+
+  &:hover {
+      text-shadow: #bbb 0px 0px 1px;
+  }
+}
 .disable-selection {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

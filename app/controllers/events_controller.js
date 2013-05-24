@@ -19,7 +19,7 @@ action(function index() {
     });
 });
 action(function create() {
-    Event.create(req.body, function (err, event) {
+    Event.create(req.body.event, function (err, event) {
         if (err || !event)
             reply(500, 'Could not create Event', { error: event && event.errors || [err] });
         else
@@ -30,8 +30,7 @@ action(function details() {
     Event.find(params.id, function (err, event) {
         if (err || !event)
             reply(404, 'Event not found');
-        else
-        resFmt({
+        else resFmt({
             json: function () { res.send(200, event) },
             html: function () { subpage('details', { event: event }) }
         });
