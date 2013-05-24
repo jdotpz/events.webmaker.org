@@ -142,27 +142,21 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     });
   }
 
-  function setupAutocomplete() {
+  function setupAutocomplete(itemName, cityLevel) {
     var defaultBounds = new google.maps.LatLngBounds(
       new google.maps.LatLng(-33.8902, 151.1759),
-      new google.maps.LatLng(-33.8474, 151.2631));
+      new google.maps.LatLng(-33.8474, 151.2631)
+    );
 
-    var inputs = document.getElementsByName("event[address]");
-    for (var input in inputs) {
+    var inputs = document.getElementsByName(itemName);
+    for (var i=0;i<inputs.length;i++) {
       var options = {
     //    bounds: defaultBounds,
-        types: []  // all
+        types: cityLevel ? ['(regions)'] : []  // [] is all
       };
 
-      autocomplete = new google.maps.places.Autocomplete(input, options);
-
+      var autocomplete = new google.maps.places.Autocomplete(inputs[i], options);
       autocomplete.bindTo('bounds', map);
-
-      // setup places changed listener to add marker when changed
-      google.maps.event.addListener(autocomplete, 'place_changed', function() {
-        // save these results for when they hit the add event button
-        // var placeData = placeToDataObject(autocomplete.getPlace());
-      });
     }
   }
 
@@ -441,19 +435,19 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         center: mapCenter,
 
-        panControl: true,
-        rotateControl: true,
-        scaleControl: true,
+        panControl: false,
+        rotateControl: false,
+        scaleControl: false,
         streetViewControl: true,
-        overviewMapControl: true,
+        overviewMapControl: false,
 
-        mapTypeControl: true,
+        mapTypeControl: false,
         mapTypeControlOptions: {
           style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
           mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.TERRAIN, 'webmaker_style']
         },
 
-        zoomControl: true,
+        zoomControl: false,
         zoomControlOptions: {
           style: google.maps.ZoomControlStyle.LARGE
         }
@@ -461,8 +455,8 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
 
       map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-      setColorOptions();
-      setupAutocomplete();
+      setupAutocomplete("event[address]", false);
+      setupAutocomplete("find-where", true);
       setupSharedInfoWindow();
 
       // this handles the multiple markers at the same location problem.
@@ -471,7 +465,12 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
         showInfoForMarker(marker);
       });
 
-      addDeleteAndLogButtons();
+      // some stuff I want to keep around, but should be disabled for public releases
+      var debugging = false
+      if (debugging) {
+        addDeleteAndLogButtons();
+        setColorOptions();
+      }
 
       var mcOptions = {
         gridSize: 20,
