@@ -23,10 +23,10 @@ Model('Event', {
     longitude:      Number,
     attendees:      Number, // enum(0..5)
     timeZone:       Number, // UTC +- N
-    beginDate:      Date,   // UTC
-    beginTime:      Number, // ms from 0:00
-    endDate:        Date,
-    endTime:        Number,
+    beginDate:      String, //Date,   // UTC
+    beginTime:      String, //Number, // ms from 0:00
+    endDate:        String, //Date,
+    endTime:        String, //Number,
     registerLink:   String, // registration URL
     picture:        Text,   // blob -- TODO: validate as image
     organizer:      String, // email address
