@@ -32,6 +32,25 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     return result;
   }
 
+  // for the demo only
+  function megaMarkers() {
+    var one = '{"title":"Writing tests can be fun","address":"94117 Grove Street, San Francisco, CA","date":"Thursday June 23rd at 3pm","description":"Tests can be fun if you know what your doing. Learn how here.","organizer":"Joey Bishop","location":{"lat":37.7755105,"lng":-122.43130139999999}}';
+    var jsonData = '[' + one;
+
+    for (var i=0;i<49;i++) {
+      jsonData += "," + one;
+    }
+    jsonData += ']';
+
+    var theModels = JSON.parse(jsonData);
+
+    for (var i in theModels) {
+      (function(model) {
+        addMarker(model);
+      })(theModels[i]);
+    }
+  }
+
   function addMarker(model) {
     var icon = {
       url: "../img/map/pin-event.png",      // 43 x 51
@@ -302,6 +321,18 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     }
   }
 
+  function addMegaMarkerButton() {
+  var theDiv = $("<button/>");
+    theDiv.css({
+      position: 'absolute',
+      bottom: '12px',
+      right: 0,
+    });
+    theDiv.text('X');
+    theDiv.appendTo($('#map-canvas').parent());
+    theDiv.click(megaMarkers);
+  }
+
   function addDeleteAndLogButtons() {
     var theDiv = $("<button/>");
     theDiv.css({
@@ -348,10 +379,10 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
 
     infoWindow = new InfoBubble({
       position: latLng,
-      minWidth: 310,
-      maxWidth: 310,
+      minWidth: 330,
+      maxWidth: 330,
       minHeight: 210,
-      maxHeight: 610,
+      maxHeight: 710,
       shadowStyle: 0,
       padding: 0,
       /**
@@ -527,6 +558,9 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
         addDeleteAndLogButtons();
         setColorOptions();
       }
+
+      // this is for the demo only
+      addMegaMarkerButton();
 
       var mcOptions = {
         gridSize: 20,
