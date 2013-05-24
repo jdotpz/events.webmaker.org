@@ -5,7 +5,7 @@ module.exports = function (compound, Event) {
     Event.hasMany(models.Make,     { as: 'makes',      foreignKey: 'eventId' });
     Event.hasMany(models.Guide,    { as: 'guides',     foreignKey: 'eventId' });
 
-    // TODO: move URI method into Event-resource
+    // TODO: generate URI method from resource routing
     Event.prototype.uri = function () {
         return '/events/' + this.id
     }
