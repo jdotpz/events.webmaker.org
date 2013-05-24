@@ -72,7 +72,7 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
       closeInfoWindow();
 
       // should only be enabled for debugging
-      logInfoForLocation(event.latLng);
+      // logInfoForLocation(event.latLng);
     });
   }
 
