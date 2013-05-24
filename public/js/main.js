@@ -1,8 +1,9 @@
-require(['jquery', 'base/webmaker', 'base/mediaGallery', 'map'],
-  function ($, webmaker, mediaGallery, Map) {
+require(['jquery', 'base/webmaker', 'base/mediaGallery', 'map', 'base/ui'],
+  function ($, webmaker, mediaGallery, Map, UI) {
   'use strict';
 
   var $body = $('body'),
+      $search = $('#search'),
       timerId;
 
   webmaker.init({
@@ -10,7 +11,21 @@ require(['jquery', 'base/webmaker', 'base/mediaGallery', 'map'],
     makeURL: $body.data('endpoint')
   });
 
+  $('.search-trigger').click( function( e ) {
+    $search.toggleClass('on');
+  });
+
+  $('#bottom-search-btn').click( function( e ) {
+    $('html, body').animate({
+      scrollTop: 0
+    }, 300, function() {
+      $search.addClass('on');
+    });
+  });
+
   mediaGallery.init(webmaker);
+
+  UI.select( '#search-filter' );
 
   timerId = setInterval(function(){
     if (typeof google !== undefined && typeof google.maps !== undefined) {
