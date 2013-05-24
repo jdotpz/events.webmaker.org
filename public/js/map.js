@@ -2,6 +2,7 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
   function ($, google, InfosBubble, MarkerClusterer/*, window.overlappingMarkerSpiderfier*/) {
 
   var map;
+  var whereAutoComplete;
   var oms;
   var geocoder;
   var infoWindow;
@@ -53,8 +54,8 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     // model needs organizerURL and detailsURL, add them here
     var copiedModel = $.extend({}, model);
 
-    copiedModel["organizerURL"] = "http://www.mozilla.org";  // SNG need real data here
-    copiedModel["detailsURL"] = "http://www.google.com";
+    copiedModel["organizerURL"] = "#";  // SNG need real data here
+    copiedModel["detailsURL"] = "/events/" + model.id;
 
     // store the content for the info window in the marker
     marker.set('infoContent', infoWindowContent(copiedModel));
@@ -143,21 +144,20 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
   }
 
   function setupAutocomplete(itemName, cityLevel) {
-    var defaultBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(-33.8902, 151.1759),
-      new google.maps.LatLng(-33.8474, 151.2631)
-    );
+    var autocomplete=null;
 
     var inputs = document.getElementsByName(itemName);
-    for (var i=0;i<inputs.length;i++) {
+
+    if (inputs.length > 0) {
       var options = {
-    //    bounds: defaultBounds,
         types: cityLevel ? ['(regions)'] : []  // [] is all
       };
 
-      var autocomplete = new google.maps.places.Autocomplete(inputs[i], options);
+      autocomplete = new google.maps.places.Autocomplete(inputs[0], options);
       autocomplete.bindTo('bounds', map);
     }
+
+    return autocomplete;
   }
 
   function placeToDataObject(place) {
@@ -399,6 +399,39 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     infoWindow.open(map, marker);
   }
 
+
+  function getCurrentPosition_success(pos) {
+    var crd = pos.coords;
+   
+  //  console.log('Your current position is:');
+  //  console.log('Latitude : ' + );
+  //  console.log('Longitude: ' + );
+  //  console.log('More or less ' + crd.accuracy + ' meters.');
+
+    var mapCenter = new google.maps.LatLng(crd.latitude, crd.longitude);
+    map.setCenter(mapCenter);
+  };
+   
+  function getCurrentPosition_error(err) {
+    console.warn('ERROR(' + err.code + '): ' + err.message);
+  };
+   
+  function updateLocation() {
+    var options = {
+  //    enableHighAccuracy: true,
+  //      timeout: 1000,
+  //      maximumAge: 0
+      };
+
+    if (navigator.geolocation) {
+       console.log('ok');
+
+      navigator.geolocation.getCurrentPosition(getCurrentPosition_success, getCurrentPosition_error, options);
+    } else {
+      console.log("Sorry - your browser doesn't support geolocation!");
+    }
+  }
+
   /*
   1) don't cluster if already zoomed in.
   2) use fontawesome for buttons
@@ -456,8 +489,9 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
       map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
       setupAutocomplete("event[address]", false);
-      setupAutocomplete("find-where", true);
+      whereAutoComplete = setupAutocomplete("find-where", true);
       setupSharedInfoWindow();
+      updateLocation();
 
       // this handles the multiple markers at the same location problem.
       oms = new OverlappingMarkerSpiderfier(map);
@@ -487,3 +521,4 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
   };
   return self;
 });
+ 
