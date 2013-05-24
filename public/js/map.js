@@ -149,13 +149,13 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     );
 
     var inputs = document.getElementsByName(itemName);
-    for (var index in inputs) {
+    for (var i=0;i<inputs.length;i++) {
       var options = {
     //    bounds: defaultBounds,
-        types: cityLevel ? ['country'] : []
+        types: [] // cityLevel ? ['country'] : []
       };
 
-      var autocomplete = new google.maps.places.Autocomplete(inputs[index], options);
+      var autocomplete = new google.maps.places.Autocomplete(inputs[i], options);
       autocomplete.bindTo('bounds', map);
     }
   }
