@@ -522,8 +522,7 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
         gridSize: 20,
         maxZoom: 15,   // don't cluster after this zoom level.  Clicking on a cluster goes to zoom 16, we don't want clusters at this level
         imagePath: "../img/map/c",
-        imageSizes: [43, 43, 43, 43, 43],
-        textColor: "white"
+        imageSizes: [43, 43, 43, 43, 43]
       };
       markerManager = new MarkerClusterer(map, [], mcOptions);
 
