@@ -485,7 +485,23 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
       map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
       setupAutocomplete("event[address]", false);
-      setupAutocomplete("find-where", true);
+
+      ac = setupAutocomplete("find-where", true);
+
+      // listen for location changes on this text field and center the map on new position
+      google.maps.event.addListener(ac, 'place_changed', function() {
+        var place = ac.getPlace();
+        if (place.geometry) {
+          // If the place has a geometry, then present it on a map.
+          if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+          } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(14);
+          }
+        }
+      });
+
       setupSharedInfoWindow();
       updateLocation();
 
