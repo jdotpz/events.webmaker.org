@@ -10,15 +10,7 @@ var app = module.exports = function getServerInstance(params) {
     params = params || {};
     // specify current dir as default root of server
     params.root = params.root || __dirname;
-    var server = require('compound').createServer(params);
-
-    var path = require('path');
-    var nunjucks = require('nunjucks'),
-        nunjucksEnv = new nunjucks.Environment(
-            new nunjucks.FileSystemLoader(path.join(server.root, 'app', 'views')));
-    nunjucksEnv.express(server);
-
-    return server;
+    return require('compound').createServer(params);
 };
 
 if (!module.parent) {
