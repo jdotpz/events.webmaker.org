@@ -21,12 +21,14 @@ Model('Event', {
     address:        String,
     latitude:       Number,
     longitude:      Number,
-    begins:         Date,
-    ends:           Date,
-    resource:       String, // TODO: validate as URI
-    organizer:      String,
-    partner:        String,
-    image:          String,
+    timeZone:       Number, // UTC +- N
+    beginDate:      Date,   // UTC
+    beginTime:      Number, // ms from 0:00
+    endDate:        Date,
+    endTime:        Number,
+    registerLink:   String, // registration URL
+    picture:        String, // blob -- TODO: validate as image
+    organizer:      String, // email address
     created:        Date,
 });
 Model('Gallery', {
