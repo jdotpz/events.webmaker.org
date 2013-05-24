@@ -153,8 +153,6 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
       var options = {
     //    bounds: defaultBounds,
         types: cityLevel ? ['(regions)'] : []  // [] is all
-
-
       };
 
       var autocomplete = new google.maps.places.Autocomplete(inputs[i], options);
@@ -437,19 +435,19 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         center: mapCenter,
 
-        panControl: true,
-        rotateControl: true,
-        scaleControl: true,
+        panControl: false,
+        rotateControl: false,
+        scaleControl: false,
         streetViewControl: true,
-        overviewMapControl: true,
+        overviewMapControl: false,
 
-        mapTypeControl: true,
+        mapTypeControl: false,
         mapTypeControlOptions: {
           style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
           mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.TERRAIN, 'webmaker_style']
         },
 
-        zoomControl: true,
+        zoomControl: false,
         zoomControlOptions: {
           style: google.maps.ZoomControlStyle.LARGE
         }
@@ -457,7 +455,6 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
 
       map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-      setColorOptions();
       setupAutocomplete("event[address]", false);
       setupAutocomplete("find-where", true);
       setupSharedInfoWindow();
@@ -468,7 +465,12 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
         showInfoForMarker(marker);
       });
 
-      addDeleteAndLogButtons();
+      // some stuff I want to keep around, but should be disabled for public releases
+      var debugging = false
+      if (debugging) {
+        addDeleteAndLogButtons();
+        setColorOptions();
+      }
 
       var mcOptions = {
         gridSize: 20,
