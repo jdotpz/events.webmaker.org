@@ -14,8 +14,13 @@
         <button type="submit"><span class="icon-chevron-right"></span></button>
     </form>
 
-    <form id="create-event" action="/events" method="POST" enctype="multipart/form-data">
-        <h2><span class="icon-plus"></span> Add an event</h2>
+
+    <div id="add-event-button">
+      <h2 class='formExpandButton'><span class="icon-plus"></span> Add an event</h2>
+    </div>
+
+    <form id="create-event" action="/events" method="POST" enctype="multipart/form-data" class='toggleHidden'>
+        <h2 class='formExpandButton'><span class="icon-plus"></span> Add an event</h2>
         <fieldset>
             <label for="event[title]"> Name your event </label>
             <textarea name="event[title]" rows=3 cols=40
@@ -39,7 +44,7 @@
             </select><br />
 
             <label for="event[address]"> Event location </label>
-            <input name="event[address]" type="text" /><br />
+            <input name="event[address]" type="text" style='width: 257px;'/><br />
 
             <label for="event[beginDate]"> Event begins </label>
             <div class='datetime'>
