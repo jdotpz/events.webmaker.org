@@ -148,13 +148,13 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
       new google.maps.LatLng(-33.8474, 151.2631));
 
     var inputs = document.getElementsByName("event[address]");
-    for (var input in inputs) {
+    for (var index in inputs) {
       var options = {
     //    bounds: defaultBounds,
         types: []  // all
       };
 
-      autocomplete = new google.maps.places.Autocomplete(input, options);
+      var autocomplete = new google.maps.places.Autocomplete(inputs[index], options);
 
       autocomplete.bindTo('bounds', map);
 
