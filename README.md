@@ -1,4 +1,4 @@
-Mozilla Webmaker
+Mozilla Webmaker Events
 ============
 
 ## Development Setup
