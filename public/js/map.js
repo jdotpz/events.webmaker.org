@@ -37,8 +37,9 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms', 'event_model
             icon: icon,
             draggable: false,
             animation: google.maps.Animation.DROP,
-            anchorPoint: new google.maps.Point(0, 20),  // point were info window is shown, horizontal is not used in infoBubble.js
-                                                        //  -- see markers anchor for this horizontal adjustment
+            // Point where info window is shown, horizontal is not used in
+            // infoBubble.js -- see markers anchor for this horizontal adjustment
+            anchorPoint: new google.maps.Point(0, 20),
         });
 
         this.markerManager.addMarker(marker);
@@ -82,7 +83,7 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms', 'event_model
 
         this.closeInfoWindow();
 
-        this.infoWindow = new InfoBubble({
+        this.infoWindow = new InfoBubble({ // TODO: move styling into less/css file
             position: latLng,
             minWidth: 330,
             maxWidth: 330,
@@ -90,42 +91,25 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms', 'event_model
             maxHeight: 710,
             shadowStyle: 0,
             padding: 0,
-            /**
-             * Padding around the tabs, now set seperately
-             * from the InfoBubble padding
-             **/
+            // Padding around the tabs, now set separately from the InfoBubble padding
             tabPadding: 12,
-            /**
-             * You can set the background color to transparent,
-             * and define a class instead
-             **/
-    //        backgroundColor: 'transparent',
+            // You can set the background color to transparent, and define a class instead
+         // backgroundColor: 'transparent',
             borderRadius: 8,
             arrowSize: 20,
             borderWidth: 1,
-            /**
-             * Now that there is no borderWidth check,
-             * you can define a borderColor and it will
-             * apply to Just the arrow
-             **/
+            // Now that there is no borderWidth check, you can define
+            // a borderColor and it will apply to Just the arrow
             borderColor: '#888888',
             disableAutoPan: false,
             hideCloseButton: true,
             arrowPosition: '50%',
             backgroundColor: 'rgba(247, 158, 0, 1)',
-            /**
-             * use the .phoney class to define all styling
-             * for your InfoBubble
-             **/
+            // use the .phoney class to define all styling for your InfoBubble
             backgroundClassName: 'info-container',
-            /**
-             * define a CSS class name for all, this is
-             * technically the "inactive" tab class
-             **/
+            // define a CSS class name for all, this is technically the "inactive" tab class
             tabClassName: 'tabClass',
-            /**
-             * define a CSS class name for active tabs only
-             **/
+            // define a CSS class name for active tabs only
             activeTabClassName: 'activeTabClass',
             arrowStyle: 0
         });
@@ -296,30 +280,6 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms', 'event_model
         }
     }
 
-    /*
-    1) don't cluster if already zoomed in.
-    2) use fontawesome for buttons
-    3) size calc not working on info window?
-
-    what are the blue dots vs. the normal blue marker?
-
-    how search by location?    zip code? area code? current location?    current map?
-
-    standard UI for entering date and time?
-
-    searching by date?    How do we pick a range to search?
-
-    it would be ideal to get new icons for heat map that had their content area in the center to make it easier to position text
-
-    simplify map and remove all but zoom controls like mock up
-
-    there are some assets needed:
-        calendar, marker for info window
-        where and when icons for search ui
-
-    */
-
-    // called from /views/map.html to install the google map
     return function () {
         setupFunctionOverrides();
 
