@@ -15,18 +15,26 @@
         <h1>{{ event.title }}</h1>
         <div id="event-whenwhere">
             <div class="temporal-local">
+            {% if event.beginDate or event.endDate %}
                 <img class="calendar-icon" src="/img/map/calendar.png" />
+            {% endif %}
                 <div class="datetime-range">
-                    <div> September 30 - October 31 </div>
-                    <div> 11:00am - 5:00pm          </div>
+                    <div> {{ event.beginDate }}
+                            {% if event.beginDate and event.endDate %} - {% endif %}
+                          {{ event.endDate }} </div>
+                    <div> {{ event.beginTime }}
+                            {% if event.beginTime and event.endTime %} - {% endif %}
+                          {{ event.endTime }} </div>
                 </div>
             </div>
             <div class="temporal-local">
+            {% if event.address %}
                 <img class="pin-icon" src="/img/map/pin-event-red.png" />
                 <div class="address">
-                    <div> Runnymede library </div>
-                    <div> Toronto, ON       </div>
+                    <div> {{ event.address }} </div>
+                    <div> {{ event.city }} </div>
                 </div>
+            {% endif %}
             </div>
         </div>
         <div id="event-organizer">

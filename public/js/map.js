@@ -1,321 +1,88 @@
-define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
-    function ($, google, InfosBubble, MarkerClusterer/*, window.overlappingMarkerSpiderfier*/) {
+define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms', 'event_model'],
+    function ($, google, InfoBubble, MarkerClusterer, OverlappingMarkerSpiderfier, EventModel) {
 
-    var map;
-    var oms;
-    var geocoder;
-    var infoWindow;
     var defaultZoom = 13;
-    var markerManager;
 
-    var seedModels = [
-        { "latitude" : 37.7755105, "longitude" : -122.4413014, "organizer" : "Joey Bishop", "date" : "Thursday June 23rd", "time" : "3pm", "address" : "94117 Grove Street, San Francisco, CA", "title" : "Writing tests can be fun", "description" : "Tests can be fun if you know what your doing. Learn how here." },
-        { "latitude" : 37.7755105, "longitude" : -122.4413014, "organizer" : "Joey Bishop", "date" : "Thursday June 23rd", "time" : "3pm", "address" : "94117 Grove Street, San Francisco, CA", "title" : "Writing tests can be fun", "description" : "Tests can be fun if you know what your doing. Learn how here." },
-        { "latitude" : 37.7755105, "longitude" : -122.4413014, "organizer" : "Joey Bishop", "date" : "Thursday June 23rd", "time" : "3pm", "address" : "94117 Grove Street, San Francisco, CA", "title" : "Writing tests can be fun", "description" : "Tests can be fun if you know what your doing. Learn how here." },
-        { "latitude" : 37.7755105, "longitude" : -122.4413014, "organizer" : "Joey Bishop", "date" : "Thursday June 23rd", "time" : "3pm", "address" : "94117 Grove Street, San Francisco, CA", "title" : "Writing tests can be fun", "description" : "Tests can be fun if you know what your doing. Learn how here." },
-        { "latitude" : 37.750842,  "longitude" : -122.437515,  "organizer" : "Amoe.ba", "date" : "Thursday July 23, 2014", "address" : "4255 24th Street, San Francisco, CA", "title" : "Coding with Ruby", "description" : "Learn to code Ruby with the guys from Amoeba." },
-        { "latitude" : 37.7635132, "longitude" : -122.4272268, "organizer" : "Sara Williams", "date" : "Friday, January 2nd, 2pm", "address" : "94114 Abbey Street, San Francisco, CA", "title" : "Code by the Park", "description" : "Sit around Dolores Park and write code" },
-        { "latitude" : 37.7784056, "longitude" : -122.4216058, "organizer" : "Dr. Dirk Dirkland", "date" : "Friday June 23rd, 3pm - 8pm", "address" : "94102 Franklin Street, San Francisco, CA", "title" : "Cobol for the Web", "description" : "Don't want to learn those new fancy smancy languages like Javascript? Use Cobol!" },
-        { "latitude" : 37.7608724, "longitude" : -122.4092099, "organizer" : "Amoe.ba", "date" : "Wed March 23, 2014", "address" : "660 York Street, San Francisco, CA", "title" : "Coding with Python", "description" : "Learn to code Python with the guys from Amoeba." }
-    ];
+    function MapMaker(map_canvas, mapOptions, mcOptions) {
+        this.map_canvas = map_canvas;
+        this.google_map = new google.maps.Map(map_canvas, mapOptions);
+        this.geocoder = new google.maps.Geocoder();
+        this.markerManager = new MarkerClusterer(this.google_map, [], mcOptions);
+        this.infoWindow = undefined;
 
-    function dropPins(models) {
-        return models.map(function (model) {
-            setTimeout(function() { addMarker(model) }, 300 + (500 * Math.random()));
+        var self = this;
+        // this handles multiple markers at the same location
+        this.oms = new OverlappingMarkerSpiderfier(this.google_map);
+        this.oms.addListener('click', function(marker, evt) {
+            self.showInfoWindow(marker);
+        });
+    }
+    MapMaker.prototype.dropPins = function (models) {
+        var self = this;
+        models.forEach(function (model) {
+            console.log(model);
+            setTimeout(function() { self.addMarker(model) },
+                        300 + (500 * Math.random()));
         })
-    }
-
-    // for demoing large marker clusters
-    function megaMarkers() {
-        var sample = {
-            title       : "Writing tests can be fun",
-            address     : "94117 Grove Street, San Francisco, CA",
-            date        : "Thursday June 23rd at 3pm",
-            description : "Tests can be fun if you know what your doing. Learn how here.",
-            organizer   : "Joey Bishop",
-            latitude    : 37.7755105,
-            longitude   : -122.43130139999999,
-        };
-        for (var i = 0; i < 49; ++i)
-            addMarker(sample);
-    }
-
-    function addMarker(model) {
+    };
+    MapMaker.prototype.addMarker = function (model) {
         var icon = {
-            url: "../img/map/pin-event.png",            // 43 x 51
+            url: "/img/map/pin-event.png",            // 43 x 51
             anchor: new google.maps.Point(23, 0)
         };
 
         var marker = new google.maps.Marker({
+            title: model.title,
             position: new google.maps.LatLng(model.latitude, model.longitude),
             icon: icon,
             draggable: false,
             animation: google.maps.Animation.DROP,
-            anchorPoint: new google.maps.Point(0, 20),    // point were info window is shown, horizontal is not used in infoBubble.js -    see markers anchor for this horizontal adjustment
-            title: model.title
+            anchorPoint: new google.maps.Point(0, 20),  // point were info window is shown, horizontal is not used in infoBubble.js
+                                                        //  -- see markers anchor for this horizontal adjustment
         });
 
-        markerManager.addMarker(marker);
-        oms.addMarker(marker);    // must keep oms in sync
-
-        // model needs organizerURL and detailsURL, add them here
-        var copiedModel = $.extend({}, model);
-
-        copiedModel["organizerURL"] = "#";    // link to organizer profile
-        copiedModel["detailsURL"] = "/events/" + model.id;
+        this.markerManager.addMarker(marker);
+        this.oms.addMarker(marker);    // must keep oms in sync
 
         // store the content for the info window in the marker
-        marker.set('infoContent', infoWindowContent(copiedModel));
+        marker.set('infoContent', model.popupHTML());
         marker.set('model', model);
 
         return marker;
+    };
+    /* Delete all markers by removing references to them */
+    MapMaker.prototype.clearMarkers = function () {
+        this.markerManager.clearMarkers();
     }
-
-    function setupSharedInfoWindow() {
-        google.maps.event.addListener(map, 'click', function(event) {
-            closeInfoWindow();
-
-            // should only be enabled for debugging
-            // logInfoForLocation(event.latLng);
+    MapMaker.prototype.getMarkers = function() {
+        return this.markerManager.getMarkers();
+    };
+    MapMaker.prototype.setupInfoWindow = function () {
+        var self = this;
+        google.maps.event.addListener(this.google_map, 'click', function(ev) {
+            self.closeInfoWindow();
         });
-    }
-
-    function logInfoForLocation(location) {
-            geocoder.geocode( { 'latLng': location}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                var placeData = placeToDataObject(results[0]);
-                console.log(JSON.stringify(eventFormData(placeData, true)));
-            }
-        });
-    }
-
-    function setColorOptions() {
-        var styles = [
-            {
-                featureType: "all",
-                stylers: [
-                    { saturation: -80 }
-                ]
-            },{
-                featureType: "road.arterial",
-                elementType: "geometry",
-                stylers: [
-                    { hue: "#00ffee" },
-                    { saturation: 50 }
-                ]
-            },{
-                featureType: "poi.business",
-                elementType: "labels",
-                stylers: [
-                    { visibility: "off" }
-                ]
-            }
-        ];
-
-        // for setting it immediately for testing
-        //     map.setOptions({styles: styles});
-
-        var styledMap = new google.maps.StyledMapType(styles, {name: "Webmaker Map"});
-
-        map.mapTypes.set('webmaker_style', styledMap);
-    //    map.setMapTypeId('webmaker_style');
-    }
-
-    // Deletes all markers in the array by removing references to them
-    function deleteMarkers() {
-        markerManager.clearMarkers();
-    }
-
-    // called from GeoCode button
-    function eventPanelAddButton() {
-        var address = document.getElementsByName('event[address]')[0].value; // FIXME
-        geocoder.geocode( { 'address': address}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                var placeData = placeToDataObject(results[0]);
-
-                adjustBoundsForPlace(results[0]);
-
-                var marker = addMarker(eventFormData(placeData, false));
-
-                showInfoBubble(marker);
-
-            } else {
-                alert('Address not found: ' + status);
-            }
-        });
-    }
-
-    function setupAutocomplete(itemName, cityLevel) {
-        var autocomplete=null;
-
-        var inputs = document.getElementsByName(itemName);
-
-        if (inputs.length > 0) {
-            var options = {
-                types: cityLevel ? ['(regions)'] : []    // [] is all
-            };
-
-            autocomplete = new google.maps.places.Autocomplete(inputs[0], options);
-            autocomplete.bindTo('bounds', map);
+    };
+    MapMaker.prototype.closeInfoWindow = function () {
+        if (this.infoWindow) {
+            this.infoWindow.setMap(null);
+            this.infoWindow = undefined;
         }
-
-        return autocomplete;
-    }
-
-    function placeToDataObject(place) {
-        return {
-            latitude:     place.geometry.location.lat(),
-            longitude:    place.geometry.location.lng(),
-            address:      addressFromPlace(place),
-            name:         place.name,
-        }
-    }
-
-    function adjustBoundsForPlace(place) {
-        if (place.geometry) {
-            if (place.geometry.viewport) {
-                map.fitBounds(place.geometry.viewport);
-            } else {
-                map.setCenter(place.geometry.location);
-            }
-        }
-    }
-
-    function extractFromAddress(components, type, short){
-        for (var i=0; i<components.length; i++) {
-            for (var j=0; j<components[i].types.length; j++) {
-                 if (components[i].types[j] == type) {
-                     return short ? components[i].short_name : components[i].long_name;
-                 }
-            }
-        }
-
-        return "";
-    }
-
-    function addressFromPlace(place) {
-        var address = '';
-        if (place.address_components) {
-            var postCode = extractFromAddress(place.address_components, "postal_code", true);
-            var street = extractFromAddress(place.address_components, "route", false);
-            var town = extractFromAddress(place.address_components, "locality", false);
-            var state = extractFromAddress(place.address_components, "administrative_area_level_1", true);
-
-    //        console.log(JSON.stringify(place.address_components));
-
-            address = "{0} {1}, {2}, {3}".interpolate([postCode, street, town, state]);
-        }
-
-        return address;
-    }
-
-    function infoWindowContent(params) {
-        var result = '<div class="info-content">'+
-            '<div class="info-title">{title}</div>' +
-
-            '<div class="info-when-where">' +
-                '<a href="#"><img src="/img/map/calendar.png" class="icon-img" /></a>' +
-                '<div class="info-date">{date}</div>' +
-                '<br/>' +
-                '<a href="#"><img src="/img/map/pin-event.png" class="icon-img" /></a>' +
-                '<div class="info-address">{address}</div>' +
-            '</div>' +
-
-            '<div class="info-description">{description}</div>' +
-            '<a href="{organizerURL}"><img src="http://lorempixel.com/75/75/" class="organizer-img" /></a>' +
-            '<div class="info-organizer"><span class="title">Organized by</span><br/>{organizer}</div>' +
-
-            // show description button
-            '<a href="{detailsURL}">' +
-            '<span class="icon-stack icon-button-size info-button">' +
-                '<i class="icon-sign-blank icon-stack-base icon-button-color"></i>' +
-                '<i class="icon-chevron-right icon-light"></i>' +
-            '</span>' +
-            '</a>' +
-
-            '</div>';
-
-        return result.interpolate(params);
-    }
-
-    function logMarkers() {
-        console.log(JSON.stringify(JSON.stringify(
-            markerManager.getMarkers().map(
-                function (marker) { return marker.get('model') }))));
-    }
-
-    function setupFunctionOverrides() {
-        // string helper function to interpolate
-        if (!String.prototype.interpolate) {
-            String.prototype.interpolate = function (o) {
-                return this.replace(
-                    /\{([^{}]*)\}/g,
-                    function (a, b) {
-                        var r = o[b];
-                        return typeof r === 'string' || typeof r === 'number' ? r : a;
-                    }
-                );
-            };
-        }
-    }
-
-    function addMegaMarkerButton() {
-    var theDiv = $("<button/>");
-        theDiv.css({
-            position: 'absolute',
-            bottom: '12px',
-            right: 0,
-        });
-        theDiv.text('X');
-        theDiv.appendTo($('#map-canvas').parent());
-        theDiv.click(megaMarkers);
-    }
-
-    function addDeleteAndLogButtons() {
-        var theDiv = $("<button/>");
-        theDiv.css({
-            position: 'absolute',
-            bottom: '12px',
-            right: 0,
-        });
-        theDiv.text('Clear Markers');
-        theDiv.appendTo($('#map-canvas').parent());
-        theDiv.click(deleteMarkers);
-
-        theDiv = $("<button/>");
-        theDiv.css({
-            position: 'absolute',
-            bottom: '12px',
-            left: 0,
-        });
-        theDiv.text('Log Markers');
-        theDiv.appendTo($('#map-canvas').parent());
-        theDiv.click(logMarkers);
-    }
-
-    function closeInfoWindow() {
-        if (infoWindow) {
-            infoWindow.setMap(null);
-            infoWindow = undefined;
-        }
-    }
-
-    function showInfoBubble(marker) {
+    };
+    MapMaker.prototype.showInfoWindow = function(marker) {
         latLng = marker.position;
 
         // close info window if clicking on already shown info window
-        if (infoWindow) {
-            if (latLng.equals(infoWindow.get('position'))) {
-                closeInfoWindow();
+        if (this.infoWindow) {
+            if (latLng.equals(this.infoWindow.get('position'))) {
+                this.closeInfoWindow();
                 return;
             }
         }
 
-        content = marker.get('infoContent');
+        this.closeInfoWindow();
 
-        closeInfoWindow();
-
-        infoWindow = new InfoBubble({
+        this.infoWindow = new InfoBubble({
             position: latLng,
             minWidth: 330,
             maxWidth: 330,
@@ -363,19 +130,32 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
             arrowStyle: 0
         });
 
-        infoWindow.setContent(content);
-        infoWindow.open(map, marker);
-    }
-    function getCurrentPosition_success(pos) {
-        var crd = pos.coords;
-        var mapCenter = new google.maps.LatLng(crd.latitude, crd.longitude);
-        map.setCenter(mapCenter);
-    }
-
-    function getCurrentPosition_error(err) {
-        console.warn('ERROR(' + err.code + '): ' + err.message);
+        this.infoWindow.setContent(marker.get('infoContent'));
+        this.infoWindow.open(this.google_map, marker);
     };
-    function updateLocation() {
+    MapMaker.prototype.setupAutocomplete = function (input, cityLevel, cb) {
+        var options = { types: cityLevel ? ['(regions)'] : [] }; // [] is all
+        var autocomplete = new google.maps.places.Autocomplete(input, options);
+        var google_map = this.google_map;
+        autocomplete.bindTo('bounds', google_map);
+
+        // listen for location changes on this text field and center the map on new position
+        google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+            cb(place);
+        });
+    };
+
+    MapMaker.prototype.updateLocation = function() {
+        var google_map = this.google_map;
+        function getCurrentPosition_success(pos) {
+            var crd = pos.coords;
+            var mapCenter = new google.maps.LatLng(crd.latitude, crd.longitude);
+            google_map.setCenter(mapCenter);
+        }
+        function getCurrentPosition_error(err) {
+            console.warn('ERROR(' + err.code + '): ' + err.message);
+        };
         var options = {
             enableHighAccuracy: true,
             timeout: 1000,
@@ -386,6 +166,133 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
             navigator.geolocation.getCurrentPosition(getCurrentPosition_success, getCurrentPosition_error, options);
         } else {
             console.log("Sorry - your browser doesn't support geolocation!");
+        }
+    }
+
+    function Address(place) {
+        function findComponent(type, short) {
+            place.address_components.forEach(function (c) {
+                c.types.forEach(function (t) {
+                    if (t == type)
+                         return short ? c.short_name : c.long_name;
+                });
+            });
+        };
+        this.number     = findComponent("street_number",  false);
+        this.street     = findComponent("route",          false);
+        this.city       = findComponent("locality",       false);
+        this.state      = findComponent("administrative_area_level_1", true);
+        this.zip_code   = findComponent("postal_code",    true);
+        this.country    = findComponent("country",        true);
+    };
+    Address.prototype.lines = function() {
+        function X (x, y) { return x ? x + (y || '') : '' }
+        return [
+            X(this.number, ' ') + X(this.street,   ', ') + X(this.city, ', '),
+            X(this.state,  ' ') + X(this.zip_code, ', ') + X(this.country)
+        ]
+    };
+    Address.prototype.findPlace = function(cb) {
+        var address = this.lines.join(' ');
+        geocoder.geocode({ 'address': address }, function(results, status) {
+            if (cb) cb(results, status == google.maps.GeocoderStatus.OK);
+        });
+    }
+    EventModel.prototype.fromPlace = function(place) {
+        return new EventModel({
+            name:         place.name,
+            address:      (new Address(place)).lines().join("\n"),
+            latitude:     place.geometry.location.lat(),
+            longitude:    place.geometry.location.lng(),
+        })
+    };
+
+    function addDeleteAndLogButtons(map_canvas) {
+        $("<button/>")
+            .css({
+                position: 'absolute',
+                bottom: '12px',
+                right: 0,
+            })
+            .text('Clear Markers')
+            .appendTo($(map_canvas).parent())
+            .click(deleteMarkers);
+
+        $("<button/>")
+            .css({
+                position: 'absolute',
+                bottom: '12px',
+                left: 0,
+            })
+            .text('Log Markers')
+            .appendTo($(map_canvas).parent())
+            .click(logMarkers);
+    }
+    function addMegaMarkerButton(mapmaker) {
+        $("<button/>")
+            .css({
+                position: 'absolute',
+                bottom: '12px',
+                right: 0,
+            })
+            .text('X')
+            .appendTo($(mapmaker.map_canvas).parent())
+            .click(function () {
+                var sample = new EventModel({
+                    title       : "Writing tests can be fun",
+                    address     : "94117 Grove Street\nSan Francisco, CA",
+                    date        : "Thursday June 23rd at 3pm",
+                    description : "Tests can be fun if you know what your doing. Learn how here.",
+                    organizer   : "Joey Bishop",
+                    latitude    : 37.7755105,
+                    longitude   : -122.43130139999999,
+                });
+                for (var i = 0; i < 49; ++i)
+                    mapmaker.addMarker(sample);
+            });
+    }
+
+    function setColorOptions() {
+        var styles = [
+            {
+                featureType: "all",
+                stylers: [
+                    { saturation: -80 }
+                ]
+            },{
+                featureType: "road.arterial",
+                elementType: "geometry",
+                stylers: [
+                    { hue: "#00ffee" },
+                    { saturation: 50 }
+                ]
+            },{
+                featureType: "poi.business",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }
+        ];
+
+        // set style immediately (for testing)
+        //map.setOptions({styles: styles});
+
+        var styledMap = new google.maps.StyledMapType(styles, {name: "Webmaker Map"});
+        map.mapTypes.set('webmaker_style', styledMap);
+    }
+    function setupFunctionOverrides() {  // TODO: consolidate utils/polyfills
+        // string helper function to interpolate
+        if (!String.prototype.interpolate) {
+            String.prototype.interpolate = function (o) {
+                return this.replace(
+                    /\{([^{}]*)\}/g,
+                    function (a, b) {
+                        var r = o[b];
+                        return typeof r === 'string' || typeof r === 'number' ? r : a;
+                    }
+                );
+            };
         }
     }
 
@@ -413,94 +320,72 @@ define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms'],
     */
 
     // called from /views/map.html to install the google map
-    return {
-        init: function () {
-            var mapCenter = new google.maps.LatLng(37.774546, -122.433523);
-            geocoder = new google.maps.Geocoder();
+    return function () {
+        setupFunctionOverrides();
 
-            setupFunctionOverrides();
+        var mapCenter = new google.maps.LatLng(37.774546, -122.433523);
+        var mapOptions = {
+            zoom: defaultZoom,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: mapCenter,
 
-            var mapOptions = {
-                zoom: defaultZoom,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                center: mapCenter,
+            panControl: false,
+            rotateControl: false,
+            scaleControl: false,
+            streetViewControl: true,
+            overviewMapControl: false,
 
-                panControl: false,
-                rotateControl: false,
-                scaleControl: false,
-                streetViewControl: true,
-                overviewMapControl: false,
+            mapTypeControl: false,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                mapTypeIds: [ 'webmaker_style',
+                    google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE,
+                    google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.TERRAIN ]
+            },
 
-                mapTypeControl: false,
-                mapTypeControlOptions: {
-                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-                    mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.TERRAIN, 'webmaker_style']
-                },
-
-                zoomControl: false,
-                zoomControlOptions: {
-                    style: google.maps.ZoomControlStyle.LARGE
-                }
-            };
-
-            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-            setupAutocomplete("event[address]", false);
-
-            ac = setupAutocomplete("find-where", true);
-
-            // listen for location changes on this text field and center the map on new position
-            google.maps.event.addListener(ac, 'place_changed', function() {
-                var place = ac.getPlace();
-                if (place.geometry) {
-                    // If the place has a geometry, then present it on a map.
-                    if (place.geometry.viewport) {
-                        map.fitBounds(place.geometry.viewport);
-                    } else {
-                        map.setCenter(place.geometry.location);
-                        map.setZoom(14);
-                    }
-                }
-            });
-
-            setupSharedInfoWindow();
-            updateLocation();
-
-
-            // setup form toggle button
-            $("h2.formExpandButton").click(function(e) {
-                e.preventDefault();
-
-                $("form#create-event").toggleClass('toggleHidden');
-                $("#add-event-button").toggleClass('toggleHidden');
-            });
-
-
-            // this handles the multiple markers at the same location problem.
-            oms = new OverlappingMarkerSpiderfier(map);
-            oms.addListener('click', function(marker, event) {
-                showInfoBubble(marker);
-            });
-
-            // some stuff I want to keep around, but should be disabled for public releases
-            var debugging = false
-            if (debugging) {
-                addDeleteAndLogButtons();
-                setColorOptions();
+            zoomControl: false,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.LARGE
             }
+        };
+        var mcOptions = {
+            gridSize: 20,
+            maxZoom: 15,    // Don't cluster after this zoom level
+                            // Clicking on a cluster goes to zoom 16,
+                            //  we don't want clusters at this level.
+            imagePath: "/img/map/c",
+            imageSizes: [43, 43, 43, 43, 43]
+        };
 
-            // this is for the demo only
-            addMegaMarkerButton();
+        var mapmaker = new MapMaker(document.getElementById('map-canvas'), mapOptions, mcOptions);
+        mapmaker.setupAutocomplete("address", false, function (place) {
+        });
+        mapmaker.setupAutocomplete("find-where", true, function (place) {
+            if (place.geometry) {
+                // If the place has a geometry, then present it on a map.
+                if (place.geometry.viewport) {
+                    google_map.fitBounds(place.geometry.viewport);
+                } else {
+                    google_map.setCenter(place.geometry.location);
+                    google_map.setZoom(14);
+                }
+            }
+        });
+        mapmaker.setupInfoWindow();
+        mapmaker.updateLocation() ;
 
-            var mcOptions = {
-                gridSize: 20,
-                maxZoom: 15,     // don't cluster after this zoom level.    Clicking on a cluster goes to zoom 16, we don't want clusters at this level
-                imagePath: "../img/map/c",
-                imageSizes: [43, 43, 43, 43, 43]
-            };
-            markerManager = new MarkerClusterer(map, [], mcOptions);
-
-            setTimeout( function() { dropPins(seedModels) }, 500);
+        // some stuff I want to keep around, but should be disabled for public releases
+        var debugging = false
+        if (debugging) {
+            addDeleteAndLogButtons();
+            setColorOptions();
         }
+
+        // this is for the demo only
+        addMegaMarkerButton(mapmaker);
+
+        EventModel.all(function (models) {
+            mapmaker.dropPins(models);
+        });
     };
 });

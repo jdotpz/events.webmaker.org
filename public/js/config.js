@@ -9,5 +9,6 @@ requirejs.config({
   shim: {
     google: { exports: 'google' },
     jquery: { exports: 'jQuery' },
+    oms:    { exports: 'OverlappingMarkerSpiderfier' },
   }
 });

@@ -2,6 +2,7 @@
 // Found here: https://github.com/RelativeMedia/InfoBubble
 //
 
+define('infobubble', ['google'], function(google){/*
 /*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +23,8 @@
  * @extends {google.maps.OverlayView}
  * @constructor
  */
-function InfoBubble(opt_options) {
+var InfoBubble;
+InfoBubble = function(opt_options) {
   this.extend(InfoBubble, google.maps.OverlayView);
   this.tabs_ = [];
   this.activeTab_ = null;
@@ -83,8 +85,6 @@ function InfoBubble(opt_options) {
 
   this.setValues(options);
 }
-window['InfoBubble'] = InfoBubble;
-
 InfoBubble.prototype.ARROW_SIZE_ = 15;
 InfoBubble.prototype.ARROW_STYLE_ = 0;
 InfoBubble.prototype.MIN_WIDTH_ = 50;
@@ -1562,4 +1562,6 @@ InfoBubble.prototype.positionCloseButton_ = function() {
   this.close_.style['right'] = this.px(right);
   this.close_.style['top'] = this.px(top);
 };
+    return InfoBubble;
+})
 

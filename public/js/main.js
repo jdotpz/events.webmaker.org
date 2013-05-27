@@ -1,5 +1,5 @@
-require(['jquery', 'base/webmaker', 'base/mediaGallery', 'map', 'base/ui'],
-  function ($, webmaker, mediaGallery, Map, UI) {
+require(['jquery', 'base/webmaker', 'base/mediaGallery', 'base/ui', 'map'],
+  function ($, webmaker, mediaGallery, UI, Map) {
   'use strict';
 
   var $body = $('body'),
@@ -28,9 +28,9 @@ require(['jquery', 'base/webmaker', 'base/mediaGallery', 'map', 'base/ui'],
   UI.select( '#search-filter' );
 
   timerId = setInterval(function(){
-    if (typeof google !== undefined && typeof google.maps !== undefined) {
+    if (google && google.maps) {
       clearInterval(timerId);
-      Map.init();
+      Map();
     }
   }, 100);
 });

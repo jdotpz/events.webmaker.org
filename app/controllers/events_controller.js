@@ -19,7 +19,22 @@ action(function index() {
     });
 });
 action(function create() {
-    Event.create(req.body.event, function (err, event) {
+    var event = req.body.event;
+    if (event) {
+        [ 'begin', 'end' ].map(function (f) {
+            var df = f + 'Date';
+            event[df] = event[df] ? new Date(event[df].split('-')) : null;
+            if (event[df] == "Invalid Date")
+                event[df] = null;
+
+            var tf = f + 'Time';
+            var ts = event[tf].split(':');
+            event[tf] = event[tf] ? new Date(0,0,0,ts[0],ts[1]) : null;
+            if (event[tf] == "Invalid Date")
+                event[tf] = null;
+        });
+    }
+    Event.create(event, function (err, event) {
         if (err || !event)
             reply(500, 'Could not create Event', { error: event && event.errors || [err] });
         else

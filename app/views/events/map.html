@@ -19,20 +19,20 @@
       <h2 class='formExpandButton'><span class="icon-plus"></span> Add an event</h2>
     </div>
 
-    <form id="create-event" action="/events" method="POST" enctype="multipart/form-data" class='toggleHidden'>
+    <form id="create-event" action="/events" method="POST" class='toggleHidden'>
         <h2 class='formExpandButton'><span class="icon-plus"></span> Add an event</h2>
         <fieldset>
-            <label for="event[title]"> Name your event </label>
-            <textarea name="event[title]" rows=3 cols=40
+            <label for="title"> Name your event </label>
+            <textarea name="title" rows=3 cols=40
                 placeholder="Use an awesome title so people will come!"></textarea><br />
 
-            <label for="event[description]"> Describe your event </label>
-            <textarea name="event[description]" rows=10 cols=40
+            <label for="description"> Describe your event </label>
+            <textarea name="description" rows=10 cols=40
                 placeholder="Tell people a few more details about your event. What can they expect?"></textarea><br />
         </fieldset>
         <fieldset>
-            <label for="event[attendees]"> How many attendees are you expecting? </label>
-            <select name="event[attendees]">
+            <label for="attendees"> How many attendees are you expecting? </label>
+            <select name="attendees">
                 <option value=0> 1-10 </option>
                 <option value=1> 10-20 </option>
                 <option value=2> 20-50 </option>
@@ -43,24 +43,24 @@
                 <option value=5> 500+ </option>
             </select><br />
 
-            <label for="event[address]"> Event location </label>
-            <input name="event[address]" type="text" /><br />
+            <label for="address"> Event location </label>
+            <input name="address" type="text" /><br />
 
-            <label for="event[beginDate]"> Event begins </label>
+            <label for="beginDate"> Event begins </label>
             <div class='datetime'>
-                <input name="event[beginDate]" type="date" />
-                <input name="event[beginTime]" type="time" />
+                <input name="beginDate" type="date" />
+                <input name="beginTime" type="time" />
             </div><br />
 
-            <label for="event[endDate]"> Event ends </label>
+            <label for="endDate"> Event ends </label>
             <div class='datetime'>
-                <input name="event[endDate]" type="date" />
-                <input name="event[endTime]" type="time" />
+                <input name="endDate" type="date" />
+                <input name="endTime" type="time" />
             </div><br />
 
             <div class="upload">
                 <input type="file" accept="image/*" />
-                <input name="event[picture]" type="hidden" />
+                <input name="picture" type="hidden" />
                 <div id="image-upload">Upload an image</div>
             </div>
             <input name="_csrf" type="hidden" value="{{ csrf_token }}" />
@@ -95,7 +95,7 @@
                     reader.onload = (function(img) {
                         return function(ev) {
                             img.src = ev.target.result;
-                            $('.upload input[name="event[picture]"]')[0].value = img.src;
+                            $('.upload input[name="picture"]')[0].value = img.src;
                         };
                     })(img);
                     reader.readAsDataURL(file);
@@ -103,12 +103,22 @@
             }
 
             $("form#create-event").on("submit", function(ev) {
-                $.post(this.attr('action'), this.serialize(), function(data) {
-                    console.log(data); // TODO: pin event on map
-                    // API: pin-event, clear-pins, popup-event
-                    //      <zoom-to-address>, <map-bounds-autocomplete>
+                var form_fields = this.serializeArray();
+                form_fields.map(function (f) {
+                    console.log(f);
                 });
+               // $.post(this.attr('action'), this.serialize(), function(data) {
+               //     console.log(data); // TODO: pin event on map
+               //     // API: pin-event, clear-pins, popup-event
+               // });
                 ev.preventDefault();
+            });
+            // setup form toggle button
+            $("h2.formExpandButton").click(function(e) {
+                e.preventDefault();
+
+                $("form#create-event").toggleClass('toggleHidden');
+                $("#add-event-button").toggleClass('toggleHidden');
             });
         </script>
     </form>

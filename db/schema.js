@@ -19,18 +19,17 @@ Model('Event', {
     title:          String,
     description:    Text,
     address:        String,
-    latitude:       Number,
-    longitude:      Number,
-    attendees:      Number, // enum(0..5)
-    timeZone:       Number, // UTC +- N
-    beginDate:      String, //Date,   // UTC
-    beginTime:      String, //Number, // ms from 0:00
-    endDate:        String, //Date,
-    endTime:        String, //Number,
+    latitude:       Text,
+    longitude:      Text,
+    attendees:      Number, // (0..5)
+    beginDate:      Date,
+    endDate:        Date,
+    beginTime:      Date,   // UTC
+    endTime:        Date,
     registerLink:   String, // registration URL
     picture:        Text,   // blob -- TODO: validate as image
-    organizer:      String, // email address
-    created:        Date,
+    organizer:      String, // email
+    created:        Date,   // TODO: make into auto-field
 });
 Model('Gallery', {
     uri:            String,
