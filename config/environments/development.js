@@ -1,5 +1,3 @@
-var express = require('express');
-
 module.exports = function (compound) {
     var app = compound.app;
 

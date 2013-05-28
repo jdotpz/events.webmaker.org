@@ -3,7 +3,7 @@ module.exports = function (compound) {
     var express = require('express');
     var app = compound.app;
 
-    require("./local")(app);
+    require("./mozilla")(app);
 
     /* Application middleware configuration */
 
@@ -20,7 +20,7 @@ module.exports = function (compound) {
             key: "webmaker.sid",
             secret: app.get('SESSION_SECRET')
         }));
-        app.use(express.csrf());  // TODO: integrate into login form
+        app.use(express.csrf());
         app.use(app.router);
     });
 
