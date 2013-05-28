@@ -11,14 +11,15 @@ define(['resource_model'], function (ResourceModel) {
         var bD = this.beginDate, eD = this.endDate,
             bT = this.beginTime, eT = this.endTime,
             icon = '<img class="calendar-icon" src="/img/map/calendar.png" />';
-        function fmtRange(b, e) {
+        function fmtRange(b, e, f) {
             var sep = (b && e ? ' - ' : '');
-            return b || e ? '<div>' + b + sep + e + '</div>' : '';
+            return b || e ? '<div>' + f(b) + sep + f(e) + '</div>' : '';
         }
         if (!bD && !eD && !bT && !eT) return '';
         return '<div class="temporal-local">' + icon
             + '<div class="datetime-range">'
-            +   fmtRange(bD, eD) + fmtRange(bT, eT)
+            +   fmtRange(bD, eD, function (x) { return new Date(x).toDateString() })
+            +   fmtRange(bT, eT, function (x) { return new Date(x).toTimeString().split(' ')[0] })
             + '</div></div>';
     };
     EventModel.prototype.addressHTML = function() {

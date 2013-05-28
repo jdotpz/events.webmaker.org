@@ -47,7 +47,24 @@ action(function details() {
             reply(404, 'Event not found');
         else resFmt({
             json: function () { res.send(200, event) },
-            html: function () { subpage('details', { event: event }) }
+            html: function () {
+                function fmtDate(x) { return new Date(x).toDateString() }
+                function fmtTime(x) { return new Date(x).toTimeString().split(' ')[0] }
+                var evt = {};
+                for (var p in event) switch(p) {
+                    case 'beginDate':
+                    case 'endDate':
+                        evt[p] = fmtDate(event[p]);
+                        break;
+                    case 'beginTime':
+                    case 'endTime':
+                        evt[p] = fmtTime(event[p]);
+                        break;
+                    default:
+                        evt[p] = event[p];
+                }
+                subpage('details', { event: evt });
+            }
         });
     });
 });
