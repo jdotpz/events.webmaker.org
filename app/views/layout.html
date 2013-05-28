@@ -7,16 +7,12 @@
     {% block head %}
     <link rel="stylesheet" href="/ext/css/font-awesome.css">
     <link href="//www.mozilla.org/tabzilla/media/css/tabzilla.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ loginAPI }}/css/nav.css" />
     <meta name="persona-email" content="{{ email }}">
     <script type="text/javascript" src="/ext/js/jquery-1.9.1.js"></script>
     {{ css('style') }}
     {% endblock %}
   </head>
   <body id="{{ page }}" class="{{ subpage }}" data-endpoint="{{ makeEndpoint }}">
-
-  <script src="https://login.persona.org/include.js"></script>
-  <script src="{{ loginAPI }}/js/sso-ux.js"></script>
 
   <header>
     <div class="persona-mobile">
@@ -145,7 +141,6 @@
     </section>
   </footer>
   <div class="mobile"></div>
-  <script src="{{ makeEndpoint }}/js/make-api.js"></script>
   <script src="//www.mozilla.org/tabzilla/media/js/tabzilla.js"></script>
   <script src="/ext/js/require.js" data-main="/js/config"></script>
   {% block scripts %}{% endblock %}

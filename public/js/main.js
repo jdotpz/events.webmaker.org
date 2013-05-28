@@ -1,15 +1,10 @@
-require(['jquery', 'base/webmaker', 'base/mediaGallery', 'base/ui', 'map'],
-  function ($, webmaker, mediaGallery, UI, Map) {
+require(['jquery', 'base/ui', 'map'],
+  function ($, UI, Map) {
   'use strict';
 
   var $body = $('body'),
       $search = $('#search'),
       timerId;
-
-  webmaker.init({
-    page: $body[0].id,
-    makeURL: $body.data('endpoint')
-  });
 
   $('.search-trigger').click( function( e ) {
     $search.toggleClass('on');
@@ -22,8 +17,6 @@ require(['jquery', 'base/webmaker', 'base/mediaGallery', 'base/ui', 'map'],
       $search.addClass('on');
     });
   });
-
-  mediaGallery.init(webmaker);
 
   UI.select( '#search-filter' );
 
