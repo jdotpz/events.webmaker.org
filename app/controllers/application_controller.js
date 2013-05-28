@@ -13,8 +13,8 @@ before('set user session', function () {
     next();
 });
 before(function () {
-    this.makeEndpoint = app.get("MAKE_ENDPOINT");
-    this.personaSSO   = app.get("AUDIENCE");
-    this.loginAPI     = app.get("LOGIN");  // minor misnomer (loginAPI vs loginURL)
+    this.makeEndpoint = process.env['MAKE_ENDPOINT'];
+    this.personaSSO   = process.env['AUDIENCE'];
+    this.loginAPI     = process.env['LOGIN'];  // minor misnomer (loginAPI vs loginURL)
     next();
 });

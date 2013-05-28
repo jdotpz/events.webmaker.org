@@ -35,9 +35,9 @@ module.exports = function (compound) {
     /* Webmaker Persona SSO */
 
     var persona  = require("express-persona");
-    persona(app, { audience: app.get('AUDIENCE') });
+    persona(app, { audience: process.env['AUDIENCE'] });
 
     var loginapi = require("webmaker-loginapi");
-    compound.loginAPI = loginapi(app.get('LOGINAPI'));
+    compound.loginAPI = loginapi(process.env['LOGINAPI']);
 
 };
