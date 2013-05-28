@@ -39,35 +39,27 @@ define(['jquery'], function ($) {
             }
         });
 
-        Model.prototype._ajax = function (method, uri, data, hooks, pre_hook, post_hook) {
+        Model.prototype._ajax = function (method, uri, data, cb) {
             var self = this;
             var json_mime = 'application/json';
             $.ajax(uri, { type: method, data: data, dataType: 'json',
                 accepts: json_mime, contentType: json_mime })
              .done(function (data) {
                 var name = Model._name;
-                var run_hooks = pre_hook ? false === pre_hook.call(Model, data[name]) : true;
                 if (data[name])
                     self._data = data[name];
-                if (run_hooks) hooks.forEach(function (hook) {
-                    hook.call(Model, self);
-                });
-                if (post_hook) post_hook.call(Model, self);
+                if (cb) cb.call(Model, data[name]);
             });
             return true;
         };
-        Model.prototype.post = function (pre_hook, post_hook) {
+        Model.prototype.post = function (cb) {
             if (this._pk != null) return false;
-            return this._ajax('post', Model._uri, this._data,
-                    Model.prototype.post.hooks, pre_hook, post_hook);
+            return this._ajax('post', Model._uri, this._data, cb);
         };
-        Model.prototype.post.hooks = [];
-        Model.prototype.pull = function (pre_hook, post_hook) {
+        Model.prototype.pull = function (cb) {
             if (this._pk == null) return false;
-            return this._ajax('get', this._uri, {},
-                    Model.prototype.pull.hooks, pre_hook, post_hook);
+            return this._ajax('get', this._uri, {}, cb);
         };
-        Model.prototype.pull.hooks = [];
         Model.all = function (cb) {
             $.get(this._uri, {}, function (data, textStatus, jqXHR) {
                 var plural = Model._plural;

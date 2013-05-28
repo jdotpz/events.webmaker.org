@@ -17,7 +17,6 @@ function ($, google, InfoBubble, MarkerClusterer, OverlappingMarkerSpiderfier) {
     MapMaker.prototype.dropPins = function (models) {
         var self = this;
         models.forEach(function (model) {
-            console.log(model);
             setTimeout(function() { self.addMarker(model) },
                         300 + (500 * Math.random()));
         })
