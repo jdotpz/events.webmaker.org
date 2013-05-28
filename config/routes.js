@@ -14,4 +14,5 @@ exports.routes = function (map) {
 
     // Webmaker Persona SSO
     map.get("/user/:userid", 'users#profile');
+    map.root('home#index');
 };
