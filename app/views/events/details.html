@@ -8,10 +8,12 @@
             <img src="{{ event.picture }}" />
         </div>
         {% endif %}
+        {% if event.registerLink %}
         <div id="event-registration">
             <a id="registerLink" href="{{ event.registerLink }}">Sign up for the event <span class="icon-chevron-right"></span></a>
             <p>This link will take you to an external event registration service, such as Eventbrite.</p>
         </div>
+        {% endif %}
     </div>
     <span><div id="event-description">
         <h1>{{ event.title }}</h1>
