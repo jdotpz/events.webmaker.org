@@ -116,8 +116,7 @@ function ($, google, InfoBubble, MarkerClusterer, OverlappingMarkerSpiderfier) {
     MapMaker.prototype.setupAutocomplete = function (input, cityLevel, cb) {
         var options = { types: cityLevel ? ['(regions)'] : [] }; // [] is all
         var autocomplete = new google.maps.places.Autocomplete(input, options);
-        var google_map = this.google_map;
-        autocomplete.bindTo('bounds', google_map);
+        autocomplete.bindTo('bounds', this.google_map);
 
         var self = this;
         // listen for location changes on this text field and center the map on new position

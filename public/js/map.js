@@ -168,16 +168,16 @@ function ($, google, MapMaker, EventModel, EventForms) {
         };
 
         var mapMaker = new MapMaker(document.getElementById('map-canvas'), mapOptions, mcOptions);
-        mapMaker.setupAutocomplete($('input[name="address"]'), false, function (place) {
+        mapMaker.setupAutocomplete($('input[name="address"]')[0], false, function (place) {
         });
-        mapMaker.setupAutocomplete($('input[name="find-where"]'), true, function (place) {
+        mapMaker.setupAutocomplete($('input[name="find-where"]')[0], true, function (place) {
             if (place.geometry) {
                 // If the place has a geometry, then present it on a map.
                 if (place.geometry.viewport) {
-                    google_map.fitBounds(place.geometry.viewport);
+                    this.google_map.fitBounds(place.geometry.viewport);
                 } else {
-                    google_map.setCenter(place.geometry.location);
-                    google_map.setZoom(14);
+                    this.google_map.setCenter(place.geometry.location);
+                    this.google_map.setZoom(14);
                 }
             }
         });
