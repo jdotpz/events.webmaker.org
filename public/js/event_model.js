@@ -44,7 +44,7 @@ define(['resource_model'], function (ResourceModel) {
           + this.organizerHTML()
 
             // show description button
-          + '<a href="' + this.uri + '">'
+          + '<a href="' + this._uri + '">'
           + '<span class="icon-stack icon-button-size info-button">'
                 // XXX: change to span
               + '<i class="icon-sign-blank icon-stack-base icon-button-color"></i>'
