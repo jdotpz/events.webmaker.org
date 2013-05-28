@@ -14,15 +14,23 @@ function ($, google, InfoBubble, MarkerClusterer, OverlappingMarkerSpiderfier) {
             self.showInfoWindow(marker);
         });
     }
-    MapMaker.prototype.dropPins = function (models, filter) {
+    MapMaker.prototype.dropPins = function (models, animate, filter) {
+        animate = (animate === undefined) ? true : animate;
+
         var self = this;
         models.forEach(function (model) {
             if (filter && !filter(model)) return;
-            setTimeout(function() { self.addMarker(model) },
-                        300 + (500 * Math.random()));
+
+            if (animate)
+                setTimeout(function() { self.addMarker(model, animate) },
+                      300 + (500 * Math.random()));
+            else
+                self.addMarker(model, animate);
         })
     };
-    MapMaker.prototype.addMarker = function (model) {
+    MapMaker.prototype.addMarker = function (model, animate) {
+        animate = (animate === undefined) ? true : animate;
+
         var icon = {
             url: "/img/map/pin-event.png",            // 43 x 51
             anchor: new google.maps.Point(23, 0)
@@ -33,7 +41,7 @@ function ($, google, InfoBubble, MarkerClusterer, OverlappingMarkerSpiderfier) {
             position: new google.maps.LatLng(model.latitude, model.longitude),
             icon: icon,
             draggable: false,
-            animation: google.maps.Animation.DROP,
+            animation: animate ? google.maps.Animation.DROP : undefined,
             // Point where info window is shown, horizontal is not used in
             // infoBubble.js -- see markers anchor for this horizontal adjustment
             anchorPoint: new google.maps.Point(0, 20),

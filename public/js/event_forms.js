@@ -79,10 +79,10 @@ function ($, EventModel) { return function (mapMaker) {
                 mapMaker.clearMarkers();
                 var targetDateStr = find_when[0].value;
                 if (!targetDateStr)
-                    mapMaker.dropPins(models);
+                    mapMaker.dropPins(models, false);
                 else {
                     var targetDate = new Date(targetDateStr.split('-'));
-                    mapMaker.dropPins(models, function (model) {
+                    mapMaker.dropPins(models, false, function (model) {
                         var beginDate  = new Date(model.beginDate),
                             endDate    = new Date(model.endDate);
                         if (model.beginDate && model.endDate)
@@ -100,6 +100,8 @@ function ($, EventModel) { return function (mapMaker) {
 
         // setup form toggle button
         function toggleCreateForm() {
+            create_form[0].reset();
+
             create_form.toggleClass('toggleHidden');
             $("#add-event-button").toggleClass('toggleHidden');
         }
