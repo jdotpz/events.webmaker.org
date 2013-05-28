@@ -1,5 +1,5 @@
 define(['jquery', 'event_model'],
-function ($, EventModel) {
+function ($, EventModel) { return function (mapMaker) {
     $(document).ready(function () {
         var create_form = $('form#create-event');
         var file_input = create_form.find('input[type="file"]');
@@ -42,24 +42,56 @@ function ($, EventModel) {
         create_form.on("submit", function(ev) {
             ev.preventDefault();
             var form_fields = create_form.serializeArray();
-            var data = {};
+            var data = { event: {} };
             form_fields.forEach(function (f) {
-                if (f.name)
-                    data[f.name] = f.value;
+                if (f.name) switch (f.name) {
+                    case '_csrf':
+                        data[f.name] = f.value;
+                        break;
+                    case 'address': // TODO: split address into two lines
+                    default:
+                        data.event[f.name] = f.value;
+                }
             });
-            var model = new EventModel(data);
-            model.post(function (event) {
-                mapMaker.addMarker(event);
-                console.log(event); // TODO: pin event on map
-                // API: pin-event, clear-pins, popup-event
-            });
+            $.post(create_form.attr('action'), data, function (data) {
+                console.log(data.event);
+                if (data.event) {
+                    toggleCreateForm();
+                    mapMaker.addMarker(new EventModel(data.event));
+                }
+            }, 'json');
             return false;
         });
+
         // setup form toggle button
-        $("h2.formExpandButton").click(function(ev) {
-            ev.preventDefault();
+        function toggleCreateForm() {
             create_form.toggleClass('toggleHidden');
             $("#add-event-button").toggleClass('toggleHidden');
+        }
+        $("h2.formExpandButton").click(function(ev) {
+            ev.preventDefault();
+            toggleCreateForm();
+        });
+
+        mapMaker.setupAutocomplete($('input[name="address"]')[0], false, function (place) {
+            var loc = { latitude:   place.geometry.location.lat(),
+                        longitude:  place.geometry.location.lng() };
+            for (var k in loc)
+                $('form#create-event').find('input[name="'+k+'"]').val(loc[k]);
+        });
+        mapMaker.setupAutocomplete($('input[name="find-where"]')[0], true, function (place) {
+            if (place.geometry) {
+                // If the place has a geometry, then present it on a map.
+                if (place.geometry.viewport) {
+                    this.google_map.fitBounds(place.geometry.viewport);
+                } else {
+                    this.google_map.setCenter(place.geometry.location);
+                    this.google_map.setZoom(14);
+                }
+            }
+        });
+        EventModel.all(function (models) {
+            mapMaker.dropPins(models);
         });
     });
-})
+}})

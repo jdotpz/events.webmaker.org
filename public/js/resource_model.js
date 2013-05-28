@@ -39,27 +39,6 @@ define(['jquery'], function ($) {
             }
         });
 
-        Model.prototype._ajax = function (method, uri, data, cb) {
-            var self = this;
-            var json_mime = 'application/json';
-            $.ajax(uri, { type: method, data: data, dataType: 'json',
-                accepts: json_mime, contentType: json_mime })
-             .done(function (data) {
-                var name = Model._name;
-                if (data[name])
-                    self._data = data[name];
-                if (cb) cb.call(Model, data[name]);
-            });
-            return true;
-        };
-        Model.prototype.post = function (cb) {
-            if (this._pk != null) return false;
-            return this._ajax('post', Model._uri, this._data, cb);
-        };
-        Model.prototype.pull = function (cb) {
-            if (this._pk == null) return false;
-            return this._ajax('get', this._uri, {}, cb);
-        };
         Model.all = function (cb) {
             $.get(this._uri, {}, function (data, textStatus, jqXHR) {
                 var plural = Model._plural;

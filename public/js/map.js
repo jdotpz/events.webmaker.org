@@ -1,5 +1,5 @@
-define(['jquery', 'google', 'map_maker', 'event_model', 'event_forms'],
-function ($, google, MapMaker, EventModel, EventForms) {
+define(['jquery', 'google', 'map_maker', 'event_forms'],
+function ($, google, MapMaker, EventForms) {
 
     var defaultZoom = 13;
 
@@ -32,14 +32,6 @@ function ($, google, MapMaker, EventModel, EventForms) {
             if (cb) cb(results, status == google.maps.GeocoderStatus.OK);
         });
     }
-    EventModel.prototype.fromPlace = function(place) {
-        return new EventModel({
-            name:         place.name,
-            address:      (new Address(place)).lines().join("\n"),
-            latitude:     place.geometry.location.lat(),
-            longitude:    place.geometry.location.lng(),
-        })
-    };
 
     function addDeleteAndLogButtons(map_canvas) {
         $("<button/>")
@@ -61,29 +53,6 @@ function ($, google, MapMaker, EventModel, EventForms) {
             .text('Log Markers')
             .appendTo($(map_canvas).parent())
             .click(logMarkers);
-    }
-    function addMegaMarkerButton(mapMaker) {
-        $("<button/>")
-            .css({
-                position: 'absolute',
-                bottom: '12px',
-                right: 0,
-            })
-            .text('X')
-            .appendTo($(mapMaker.map_canvas).parent())
-            .click(function () {
-                var sample = new EventModel({
-                    title       : "Writing tests can be fun",
-                    address     : "94117 Grove Street\nSan Francisco, CA",
-                    date        : "Thursday June 23rd at 3pm",
-                    description : "Tests can be fun if you know what your doing. Learn how here.",
-                    organizer   : "Joey Bishop",
-                    latitude    : 37.7755105,
-                    longitude   : -122.43130139999999,
-                });
-                for (var i = 0; i < 49; ++i)
-                    mapMaker.addMarker(sample);
-            });
     }
 
     function setColorOptions() {
@@ -167,23 +136,6 @@ function ($, google, MapMaker, EventModel, EventForms) {
             imageSizes: [43, 43, 43, 43, 43]
         };
 
-        var mapMaker = new MapMaker(document.getElementById('map-canvas'), mapOptions, mcOptions);
-        mapMaker.setupAutocomplete($('input[name="address"]')[0], false, function (place) {
-        });
-        mapMaker.setupAutocomplete($('input[name="find-where"]')[0], true, function (place) {
-            if (place.geometry) {
-                // If the place has a geometry, then present it on a map.
-                if (place.geometry.viewport) {
-                    this.google_map.fitBounds(place.geometry.viewport);
-                } else {
-                    this.google_map.setCenter(place.geometry.location);
-                    this.google_map.setZoom(14);
-                }
-            }
-        });
-        mapMaker.setupInfoWindow();
-        mapMaker.updateLocation() ;
-
         // some stuff I want to keep around, but should be disabled for public releases
         var debugging = false
         if (debugging) {
@@ -191,13 +143,12 @@ function ($, google, MapMaker, EventModel, EventForms) {
             setColorOptions();
         }
 
-        // this is for the demo only
-        addMegaMarkerButton(mapMaker);
+        var mapMaker = new MapMaker($('#map-canvas')[0], mapOptions, mcOptions);
+        mapMaker.setupInfoWindow();
+        mapMaker.updateLocation() ;
 
-        EventModel.all(function (models) {
-            mapMaker.dropPins(models);
-        });
-        window.mapMaker = mapMaker; // XXX: quick hack
+        EventForms(mapMaker);
+
         return mapMaker;
     };
 });
