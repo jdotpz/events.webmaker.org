@@ -1,5 +1,5 @@
-define(['jquery'],
-  function ($) {
+define(['jquery', 'packery'],
+  function ($, Packery) {
   'use strict';
 
   var countLarge = 2,

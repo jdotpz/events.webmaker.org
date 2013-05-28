@@ -14,9 +14,10 @@ function ($, google, InfoBubble, MarkerClusterer, OverlappingMarkerSpiderfier) {
             self.showInfoWindow(marker);
         });
     }
-    MapMaker.prototype.dropPins = function (models) {
+    MapMaker.prototype.dropPins = function (models, filter) {
         var self = this;
         models.forEach(function (model) {
+            if (filter && !filter(model)) return;
             setTimeout(function() { self.addMarker(model) },
                         300 + (500 * Math.random()));
         })

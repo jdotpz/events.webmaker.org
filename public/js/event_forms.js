@@ -2,6 +2,8 @@ define(['jquery', 'event_model'],
 function ($, EventModel) { return function (mapMaker) {
     $(document).ready(function () {
         var create_form = $('form#create-event');
+        var find_form = $('form#find-event');
+
         var file_input = create_form.find('input[type="file"]');
         var upload_div = create_form.find('#image-upload');
         upload_div.on("click", function(ev) {
@@ -35,6 +37,7 @@ function ($, EventModel) { return function (mapMaker) {
                 reader.readAsDataURL(file);
             }
         }
+
         create_form.find('button[type="submit"]').click(function (ev) {
             ev.preventDefault();
             create_form.submit();
@@ -61,6 +64,38 @@ function ($, EventModel) { return function (mapMaker) {
                 }
             }, 'json');
             return false;
+        });
+
+        find_form.find('button[type="submit"]').click(function (ev) {
+            ev.preventDefault();
+            find_form.submit();
+        });
+        var find_when = find_form.find('input[name="find-when"]');
+        find_when.blur(function(ev) { find_form.submit() });
+        mmm = mapMaker;
+        find_form.on("submit", function(ev) {
+            ev.preventDefault();
+            EventModel.all(function (models) {
+                mapMaker.clearMarkers();
+                var targetDateStr = find_when[0].value;
+                if (!targetDateStr)
+                    mapMaker.dropPins(models);
+                else {
+                    var targetDate = new Date(targetDateStr.split('-'));
+                    mapMaker.dropPins(models, function (model) {
+                        var beginDate  = new Date(model.beginDate),
+                            endDate    = new Date(model.endDate);
+                        if (model.beginDate && model.endDate)
+                            return beginDate <= targetDate
+                                && endDate >= targetDate
+                        else if (beginDate)
+                            return beginDate <= targetDate
+                        else if (endDate)
+                            return endDate >= targetDate
+                        else return true
+                    });
+                }
+            });
         });
 
         // setup form toggle button
