@@ -47,11 +47,12 @@ function ($, EventModel) {
                 if (f.name)
                     data[f.name] = f.value;
             });
-            console.log(data);
-            $.post(create_form.attr('action'), data, function(data) {
-                console.log(data); // TODO: pin event on map
+            var model = new EventModel(data);
+            model.post(function (event) {
+                mapMaker.addMarker(event);
+                console.log(event); // TODO: pin event on map
                 // API: pin-event, clear-pins, popup-event
-            }, 'json');
+            });
             return false;
         });
         // setup form toggle button

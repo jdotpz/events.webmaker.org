@@ -1,13 +1,11 @@
 define(['resource_model'], function (ResourceModel) {
 
-    function EventModel(data) {
-        this._data = data ? $.extend({}, data) : {};
-    }
-    EventModel.prototype = new ResourceModel('/events', [
-        'title', 'description', 'address', 'latitude', 'longitude',
-        'attendees', 'beginDate', 'beginTime', 'endDate', 'endTime',
-        'registerLink', 'picture', 'organizer', 'created' ]);
-    EventModel.prototype.constructor = EventModel;
+    var EventModel = new ResourceModel({
+        name:   'event',
+        fields: [ 'title', 'description', 'address', 'latitude', 'longitude',
+            'attendees', 'beginDate', 'beginTime', 'endDate', 'endTime',
+            'registerLink', 'picture', 'organizer', 'created', 'id' ],
+    });
 
     EventModel.prototype.datetimeHTML = function() {
         var bD = this.beginDate, eD = this.endDate,
@@ -52,16 +50,6 @@ define(['resource_model'], function (ResourceModel) {
               + '<i class="icon-sign-blank icon-stack-base icon-button-color"></i>'
               + '<i class="icon-chevron-right icon-light"></i>'
           + '</span></a></div>';
-    };
-    EventModel.all = function (cb) {
-        var Model = this;
-        $.getJSON(this._route, {}, function (data, textStatus, jqXHR) {
-            if (!data.events) data.events = [];
-            var collection = data.events.map(function (event) {
-                return new Model(event);
-            });
-            if (cb) cb(collection, textStatus, jqXHR);
-        });
     };
 
     return EventModel;
