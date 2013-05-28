@@ -154,4 +154,39 @@ body#events .map-overlay {
             }
         }
     }
+    h2.formExpandButton {
+        .disable-selection;
+        .clickable;
+    }
+
+    .toggleHidden {
+        display: none;
+    }
+
+    #add-event-button {
+        background: #e1000b;
+        &:hover  { background: #ee1c25; }
+        &:active { background: #d7000a; }
+
+        width:      180px;
+        margin-top: 10px;
+
+        color: #fff;
+
+        h2 {
+            .icon-plus {
+                margin-right:   4px;
+
+                font-size:  18px;
+            }
+
+            margin-top:     1px;
+            margin-left:    4px;
+            padding:        10px 12px;
+            padding-bottom: 12px;
+
+            font-size:      20px;
+            font-weight:    300;
+        }
+    }
 }
