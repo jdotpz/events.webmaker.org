@@ -2,8 +2,9 @@ module.exports = function (compound) {
     var app = compound.app;
 
     app.configure('production', function () {
-        app.enable('merge javascripts');
-        app.enable('merge stylesheets');
+        app.enable('view cache');
+        app.enable('model cache');
+        app.enable('eval cache');
         app.disable('assets timestamps');
         app.use(require('express').errorHandler());
         app.settings.quiet = true;
