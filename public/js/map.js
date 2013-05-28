@@ -1,5 +1,5 @@
-define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms', 'event_model'],
-    function ($, google, InfoBubble, MarkerClusterer, OverlappingMarkerSpiderfier, EventModel) {
+define(['jquery', 'google', 'infobubble', 'markerclusterer', 'oms', 'event_model', 'event_forms'],
+function ($, google, InfoBubble, MarkerClusterer, OverlappingMarkerSpiderfier, EventModel, EventForms) {
 
     var defaultZoom = 13;
 

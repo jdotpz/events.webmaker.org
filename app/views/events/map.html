@@ -67,60 +67,6 @@
 
             <button type="submit"><span class="icon-plus"></span> Submit your event</button>
         </fieldset>
-
-        <script>
-            var file_input = $('input[type="file"]');
-            var upload_div = $('#image-upload');
-            upload_div.on("click", function(ev) {
-                file_input.click();
-                ev.preventDefault();
-            }).on("dragenter dragover drop", function(ev) {
-                ev.stopPropagation();
-                ev.preventDefault();
-            }).on("drop", function(ev) {
-                handleImg(ev.dataTransfer.files[0]);
-            });
-            file_input.on("change", function (ev) {
-                handleImg(this.files[0]);
-            });
-
-            // based on MDN example
-            function handleImg(file) {
-                if (file.type.match(/image.*/)) {
-                    upload_div.html("<img />");
-                    var img = upload_div.find("img")[0];
-                    img.file = file;
-
-                    var reader = new FileReader();
-                    reader.onload = (function(img) {
-                        return function(ev) {
-                            img.src = ev.target.result;
-                            $('.upload input[name="picture"]')[0].value = img.src;
-                        };
-                    })(img);
-                    reader.readAsDataURL(file);
-                }
-            }
-
-            $("form#create-event").on("submit", function(ev) {
-                var form_fields = this.serializeArray();
-                form_fields.map(function (f) {
-                    console.log(f);
-                });
-               // $.post(this.attr('action'), this.serialize(), function(data) {
-               //     console.log(data); // TODO: pin event on map
-               //     // API: pin-event, clear-pins, popup-event
-               // });
-                ev.preventDefault();
-            });
-            // setup form toggle button
-            $("h2.formExpandButton").click(function(e) {
-                e.preventDefault();
-
-                $("form#create-event").toggleClass('toggleHidden');
-                $("#add-event-button").toggleClass('toggleHidden');
-            });
-        </script>
     </form>
     </div>
 </div>
