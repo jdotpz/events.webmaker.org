@@ -3,9 +3,11 @@
 {% block body %}
 <div id="details-pane">
     <div class="gallery-sidebar">
+        {% if event.picture %}
         <div id="event-picture">
             <img src="{{ event.picture }}" />
         </div>
+        {% endif %}
         <div id="event-registration">
             <a id="registerLink" href="{{ event.registerLink }}">Sign up for the event <span class="icon-chevron-right"></span></a>
             <p>This link will take you to an external event registration service, such as Eventbrite.</p>
